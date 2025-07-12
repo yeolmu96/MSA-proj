@@ -11,7 +11,7 @@ echo "========== ▶ Eureka 서버 실행 ... =============="
 
 sleep 5
 
-services=("example-service" "example2-service")
+services=("example-service" "example2-service" "account-service")
 
 for service in "${services[@]}"; do
   echo "========== ▶ 서비스 서버 실행 ... =============="
