@@ -4,6 +4,7 @@ echo "✅ gradlew 실행 권한 + ..."
 chmod +x eureka-server/gradlew
 chmod +x gateway-service/gradlew
 chmod +x example-service/gradlew
+chmod +x account-service/gradlew
 
 
 echo "========== ▶ Eureka 서버 실행 ... =============="
