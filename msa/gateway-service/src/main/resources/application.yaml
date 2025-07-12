@@ -23,6 +23,14 @@ spring:
             - StripPrefix=1
             - SetRequestHeader=Accept, application/json
 
+        - id: account-service
+          uri: lb://account-service
+          predicates:
+            - Path=/api/account/**
+          filters:
+            - StripPrefix=1
+            - SetRequestHeader=Accept, application/json
+
 
       discovery:
         locator:
