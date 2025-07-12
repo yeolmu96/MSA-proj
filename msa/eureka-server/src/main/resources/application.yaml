@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: eureka-server
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
+    cluster:
+      peer-eureka-nodes: http://localhost:9876/eureka/
