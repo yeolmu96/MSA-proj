@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: example-service
+
+
+  datasource:
+    url:
