@@ -1,5 +1,4 @@
 @echo off
-echo ✅ gradlew 실행 권한 부여는 윈도우에서 불필요합니다.
 
 echo ========== ▶ Eureka 서버 실행 ... ==============
 start cmd /k "cd eureka-server && gradlew.bat bootRun"
