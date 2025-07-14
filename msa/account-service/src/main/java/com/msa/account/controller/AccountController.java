@@ -4,14 +4,15 @@ package com.msa.account.controller;
 import com.msa.account.controller.request.GatheringAccountRequest;
 import com.msa.account.controller.request.LoginAccountRequest;
 import com.msa.account.controller.request.RegisterAccountRequest;
-import com.msa.account.controller.response.AccountInfoResponse;
-import com.msa.account.controller.response.IdAccountResponse;
-import com.msa.account.controller.response.LoginAccountResponse;
-import com.msa.account.controller.response.RegisterAccountResponse;
+import com.msa.account.controller.response.*;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.GatheringService;
+import com.msa.account.service.MyAccountService;
+import com.msa.account.service.ReviewService;
+import com.msa.account.service.TokenService;
 import com.msa.account.utility.EncryptionUtility;
+import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,10 @@ public class AccountController {
 
     @Autowired
     private RedisCacheService redisCacheService;
-
     private final GatheringService gatheringService;
+    private final ReviewService reviewService;
+    private final MyAccountService myAccountService;
+    private final TokenService tokenService;
 
     @GetMapping("/test")
     public String test(){
@@ -92,7 +95,7 @@ public class AccountController {
     @GetMapping("/find-id")
     public ResponseEntity<IdAccountResponse> getAccountId(@RequestHeader("Authorization") String token){
 
-        String pureToken = extractToken(token);
+        String pureToken = TokenUtility.extractToken(token);
         Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
 
         if(accountId == null){
@@ -108,11 +111,31 @@ public class AccountController {
         return ResponseEntity.ok(IdAccountResponse.from(account.get().getId()));
     }
 
-    private String extractToken(String token){
-        if(token != null && token.startsWith("Bearer ")){
-            return token.substring(7);
-        }
+    //로그아웃(redis delete)
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token){
+        String pureToken = TokenUtility.extractToken(token);
+        redisCacheService.deleteKey(pureToken);
 
-        return token;
+        return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    //Review 요청
+    @GetMapping("/review-info")
+    public ReviewAccountInfoResponse getAccountInfo(@RequestHeader("Authorization") String token){
+        return reviewService.findAccountByToken(token);
+    }
+
+    //내 정보 조회
+    @GetMapping("/me")
+    public MyAccountInfoResponse getMyAccountInfo(@RequestHeader("Authorization") String token){
+        return myAccountService.getMyAccountInfo(token);
+    }
+
+    //새 토큰 발급
+    @PostMapping("/refresh-token")
+    public LoginAccountResponse refreshToken(@RequestHeader("Authorization") String token){
+        String newToken = tokenService.refreshToken(token);
+        return LoginAccountResponse.from(newToken);
     }
 }

@@ -3,7 +3,9 @@ package com.msa.account.controller.request;
 import com.msa.account.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
-
+/*
+gathering 요청
+ */
 @Getter @Setter
 public class GatheringAccountRequest {
 
