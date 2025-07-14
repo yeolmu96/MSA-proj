@@ -10,5 +10,5 @@ public class GatheringAccountRequest {
     private Long accountId;
     private Long gatheringId;
     private Role role;
-    private boolean isHost;
+    private Boolean isHost;
 }

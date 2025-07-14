@@ -5,6 +5,7 @@ import com.msa.account.controller.request.GatheringAccountRequest;
 import com.msa.account.controller.request.LoginAccountRequest;
 import com.msa.account.controller.request.RegisterAccountRequest;
 import com.msa.account.controller.response.AccountInfoResponse;
+import com.msa.account.controller.response.IdAccountResponse;
 import com.msa.account.controller.response.LoginAccountResponse;
 import com.msa.account.controller.response.RegisterAccountResponse;
 import com.msa.account.entity.Account;
@@ -14,6 +15,8 @@ import com.msa.account.utility.EncryptionUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.msa.account.redis_cache.RedisCacheService;
 
@@ -55,8 +58,8 @@ public class AccountController {
     //로그인(userToken 반환)
     @PostMapping("/login")
     public LoginAccountResponse login(@RequestBody LoginAccountRequest request){
-        String requestedUserId = request.getUserId();
-        Optional<Account> optionalAccount = accountRepository.findByUserId(requestedUserId);
+        Long accountId = request.getAccountId();
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
 
         if (optionalAccount.isEmpty()) {
             return new LoginAccountResponse(null);
@@ -80,11 +83,35 @@ public class AccountController {
     //Gathering 요청
     @PostMapping("/gathering-info")
     public List<AccountInfoResponse> GatheringAccountRequest(@RequestBody List<GatheringAccountRequest> request){
-        return gatheringService.getAccountInfo(request);
+        List<AccountInfoResponse> accountInfo = gatheringService.getAccountInfo(request);
+        log.info("GatheringAccountRequest:{}",accountInfo.toString());
+        return accountInfo;
     }
 
-//    @GetMapping("/find-id")
-//    public ResponseEntity<IdAccountResponse> getAccountId(@RequestHeader("Authorization") String token){
-//
-//    }
+    @GetMapping("/find-id")
+    public ResponseEntity<IdAccountResponse> getAccountId(@RequestHeader("Authorization") String token){
+
+        String pureToken = extractToken(token);
+        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
+
+        if(accountId == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Optional<Account> account = accountRepository.findById(accountId);
+
+        if(account.isEmpty()){
+            throw new RuntimeException("사용자가 존재하지 않음");
+        }
+
+        return ResponseEntity.ok(new IdAccountResponse(account.get().getId()));
+    }
+
+    private String extractToken(String token){
+        if(token != null && token.startsWith("Bearer ")){
+            return token.substring(7);
+        }
+
+        return token;
+    }
 }

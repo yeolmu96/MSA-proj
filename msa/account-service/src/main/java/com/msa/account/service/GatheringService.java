@@ -32,7 +32,7 @@ public class GatheringService {
                 req.getGatheringId(),
                 nickname,
                 req.getRole(),
-                req.isHost()
+                req.getIsHost()
         );
     }
 }
