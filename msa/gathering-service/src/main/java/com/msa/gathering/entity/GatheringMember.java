@@ -1,10 +1,13 @@
 package com.msa.gathering.entity;
 
+import com.msa.gathering.controller.request.GatheringApplicationApproveRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class GatheringMember {
 
     @Id
@@ -25,9 +28,12 @@ public class GatheringMember {
     private boolean isHost;
 
 
-
-
-
+    public GatheringMember(Long accountId, Role role, Gathering gathering, boolean isHost) {
+        this.accountId = accountId;
+        this.role = role;
+        this.gathering = gathering;
+        this.isHost = isHost;
+    }
 
 
 

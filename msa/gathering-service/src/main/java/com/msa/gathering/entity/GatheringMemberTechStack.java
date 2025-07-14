@@ -3,9 +3,11 @@ package com.msa.gathering.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class GatheringMemberTechStack {
 
     @Id
@@ -18,5 +20,8 @@ public class GatheringMemberTechStack {
     @OneToOne(fetch = FetchType.LAZY)
     private TechStack techStack;
 
-
+    public GatheringMemberTechStack(GatheringMember gatheringMember, TechStack techStack) {
+        this.gatheringMember = gatheringMember;
+        this.techStack = techStack;
+    }
 }
