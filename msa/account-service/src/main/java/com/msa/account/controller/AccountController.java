@@ -34,6 +34,7 @@ public class AccountController {
     public String test(){
         return "test success";
     }
+
     //사용자 등록
     @PostMapping("/register")
     public RegisterAccountResponse register(@RequestBody RegisterAccountRequest request) {
@@ -44,7 +45,7 @@ public class AccountController {
         return RegisterAccountResponse.from(createdAccount);
     }
 
-    //로그인
+    //로그인(userToken 반환)
     @PostMapping("/login")
     public LoginAccountResponse login(@RequestBody LoginAccountRequest request){
         String requestedUserId = request.getUserId();
@@ -68,4 +69,9 @@ public class AccountController {
 
         return LoginAccountResponse.from(token);
     }
+
+//    @GetMapping("/find-id")
+//    public ResponseEntity<IdAccountResponse> getAccountId(@RequestHeader("Authorization") String token){
+//
+//    }
 }

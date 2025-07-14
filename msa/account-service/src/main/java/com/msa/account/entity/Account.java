@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Setter
@@ -25,6 +26,7 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String nickname;
 
     private String company;
@@ -41,6 +43,7 @@ public class Account {
     public Account(String userId, String password) {
         this.userId = userId;
         this.password = password;
+        this.nickname = generateRandomNickname();
     }
 
     public Account(String userId, String password, String nickname, String company, Long point, LocalDateTime createdAt) {
@@ -50,5 +53,9 @@ public class Account {
         this.company = company;
         this.point = point;
         this.createdAt = createdAt;
+    }
+
+    private String generateRandomNickname() {
+        return "user_" + UUID.randomUUID().toString().substring(0, 8);
     }
 }
