@@ -3,11 +3,13 @@ package com.msa.gathering.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Gathering {
 
     @Id
@@ -36,7 +38,13 @@ public class Gathering {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
-
-
+    public Gathering(Long hostId, String teamName, String title, String description, int maxMemberCount, int currentMemberCount) {
+        this.hostId = hostId;
+        this.teamName = teamName;
+        this.title = title;
+        this.description = description;
+        this.maxMemberCount = maxMemberCount;
+        this.currentMemberCount = currentMemberCount;
+        this.createdAt = LocalDateTime.now();
+    }
 }
