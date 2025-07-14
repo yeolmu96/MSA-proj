@@ -70,4 +70,16 @@ public class PostController {
 
         return post;
     }
+
+    // Category 생성
+    @PostMapping("/posts")
+    public Post categoryPost(@RequestBody PostRequest request) {
+        Post post = new Post();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setCategory(request.getCategory());
+
+        return postRepository.save(post);
+    }
+
 }
