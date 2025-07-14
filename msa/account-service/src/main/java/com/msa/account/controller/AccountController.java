@@ -10,6 +10,7 @@ import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.GatheringService;
 import com.msa.account.service.MyAccountService;
 import com.msa.account.service.ReviewService;
+import com.msa.account.service.TokenService;
 import com.msa.account.utility.EncryptionUtility;
 import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class AccountController {
     private final GatheringService gatheringService;
     private final ReviewService reviewService;
     private final MyAccountService myAccountService;
+    private final TokenService tokenService;
 
     @GetMapping("/test")
     public String test(){
@@ -128,5 +130,12 @@ public class AccountController {
     @GetMapping("/me")
     public MyAccountInfoResponse getMyAccountInfo(@RequestHeader("Authorization") String token){
         return myAccountService.getMyAccountInfo(token);
+    }
+
+    //새 토큰 발급
+    @PostMapping("/refresh-token")
+    public LoginAccountResponse refreshToken(@RequestHeader("Authorization") String token){
+        String newToken = tokenService.refreshToken(token);
+        return LoginAccountResponse.from(newToken);
     }
 }
