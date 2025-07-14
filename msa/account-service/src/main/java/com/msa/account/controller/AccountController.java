@@ -88,6 +88,7 @@ public class AccountController {
         return accountInfo;
     }
 
+    //로그인해서 발급 받은 토큰으로 현재 로그인한 계정의 ID를 확인
     @GetMapping("/find-id")
     public ResponseEntity<IdAccountResponse> getAccountId(@RequestHeader("Authorization") String token){
 
