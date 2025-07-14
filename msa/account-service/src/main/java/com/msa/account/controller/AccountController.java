@@ -3,15 +3,14 @@ package com.msa.account.controller;
 
 import com.msa.account.controller.request.GatheringAccountRequest;
 import com.msa.account.controller.request.LoginAccountRequest;
+import com.msa.account.controller.request.PasswordChangeRequest;
 import com.msa.account.controller.request.RegisterAccountRequest;
 import com.msa.account.controller.response.*;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
-import com.msa.account.service.GatheringService;
-import com.msa.account.service.MyAccountService;
-import com.msa.account.service.ReviewService;
-import com.msa.account.service.TokenService;
+import com.msa.account.service.*;
 import com.msa.account.utility.EncryptionUtility;
+import com.msa.account.utility.PasswordPolicyValidator;
 import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +41,8 @@ public class AccountController {
     private final ReviewService reviewService;
     private final MyAccountService myAccountService;
     private final TokenService tokenService;
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("/test")
     public String test(){
@@ -51,10 +52,10 @@ public class AccountController {
     //사용자 등록
     @PostMapping("/register")
     public RegisterAccountResponse register(@RequestBody RegisterAccountRequest request) {
-
-        Account requestedAccount = request.toAccount();
-        Account createdAccount = accountRepository.save(requestedAccount);
-
+        //비밀번호 정책 검증
+        PasswordPolicyValidator.validate(request.getPassword());
+        //Account 엔티티 생성 + 비밀번호 암호화
+        Account createdAccount = accountRepository.save(request.toAccount());
         return RegisterAccountResponse.from(createdAccount);
     }
 
@@ -122,8 +123,11 @@ public class AccountController {
 
     //Review 요청
     @GetMapping("/review-info")
-    public ReviewAccountInfoResponse getAccountInfo(@RequestHeader("Authorization") String token){
-        return reviewService.findAccountByToken(token);
+    public ReviewAccountInfoResponse getAccountInfo(@RequestParam("accountId") Long accountId){
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다. Id: " +  accountId));
+
+        return new ReviewAccountInfoResponse(account.getNickname(), account.getCompany());
     }
 
     //내 정보 조회
@@ -137,5 +141,15 @@ public class AccountController {
     public LoginAccountResponse refreshToken(@RequestHeader("Authorization") String token){
         String newToken = tokenService.refreshToken(token);
         return LoginAccountResponse.from(newToken);
+    }
+
+    //비밀번호 변경
+    @PatchMapping("/password")
+    public ResponseEntity<String> changePassword(
+            @RequestHeader("Authorization") String token,
+            @RequestBody PasswordChangeRequest request
+    ){
+        accountService.changePassword(token, request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
     }
 }

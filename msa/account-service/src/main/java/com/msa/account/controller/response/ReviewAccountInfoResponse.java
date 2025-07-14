@@ -12,12 +12,10 @@ Review 응답
 @ToString
 public class ReviewAccountInfoResponse {
 
-    private Long accountId;
     private String nickname;
     private String institutionType;
 
-    public ReviewAccountInfoResponse(Long accountId, String nickname, String institutionType) {
-        this.accountId = accountId;
+    public ReviewAccountInfoResponse(String nickname, String institutionType) {
         this.nickname = nickname;
         this.institutionType = institutionType;
     }

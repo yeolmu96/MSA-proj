@@ -35,7 +35,6 @@ public class ReviewService {
         Account account = optionalAccount.get();
 
         return new ReviewAccountInfoResponse(
-                account.getId(),
                 account.getNickname(),
                 account.getCompany()); //company 컬럽을 institutionType으로 매핑
     }
