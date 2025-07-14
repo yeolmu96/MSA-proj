@@ -123,8 +123,11 @@ public class AccountController {
 
     //Review 요청
     @GetMapping("/review-info")
-    public ReviewAccountInfoResponse getAccountInfo(@RequestHeader("Authorization") String token){
-        return reviewService.findAccountByToken(token);
+    public ReviewAccountInfoResponse getAccountInfo(@RequestParam("accountId") Long accountId){
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다. Id: " +  accountId));
+
+        return new ReviewAccountInfoResponse(account.getNickname(), account.getCompany());
     }
 
     //내 정보 조회
