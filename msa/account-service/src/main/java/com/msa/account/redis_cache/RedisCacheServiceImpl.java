@@ -54,4 +54,9 @@ public class RedisCacheServiceImpl implements RedisCacheService {
 
         throw new IllegalArgumentException("Unsupported class " + clazz);
     }
+
+    @Override
+    public void deleteKey(String key) {
+        redisTemplate.delete(key);
+    }
 }

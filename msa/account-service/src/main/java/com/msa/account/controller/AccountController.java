@@ -109,5 +109,11 @@ public class AccountController {
         return ResponseEntity.ok(IdAccountResponse.from(account.get().getId()));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token){
+        String pureToken = TokenUtility.extractToken(token);
+        redisCacheService.deleteKey(pureToken);
 
+        return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
 }
