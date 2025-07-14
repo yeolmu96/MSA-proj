@@ -25,7 +25,11 @@ public class PostController {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
-        Post post = new Post(request.getTitle(), request.getContent(), board);
+        Post post = new Post();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setBoard(board); // 게시판 연관관계 설정
+
         return postRepository.save(post);
     }
 
@@ -35,6 +39,7 @@ public class PostController {
         return postRepository.findByBoardId(boardId);
     }
 
+    // 게시글 조회수
     @GetMapping("/{id}")
     public Post getPost(@PathVariable Long id) {
         Optional<Post> maybePost = postRepository.findById(id);
@@ -44,7 +49,23 @@ public class PostController {
         }
 
         Post post = maybePost.get();
-        post.setView_count(post.getView_count() + 1);
+        post.setViewCount(post.getViewCount() + 1);
+        postRepository.save(post);
+
+        return post;
+    }
+
+    // 추천 API 만들기
+    @PostMapping("/{id}/recommend")
+    public Post recommendPost(@PathVariable Long id) {
+        Optional<Post> maybePost = postRepository.findById(id);
+
+        if (maybePost.isEmpty()) {
+            throw new RuntimeException("게시글을 찾을 수 없습니다.");
+        }
+
+        Post post = maybePost.get();
+        post.setRecommendCount(post.getRecommendCount() + 1);
         postRepository.save(post);
 
         return post;
