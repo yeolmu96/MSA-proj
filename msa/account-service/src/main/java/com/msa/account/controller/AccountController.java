@@ -12,6 +12,7 @@ import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.GatheringService;
 import com.msa.account.utility.EncryptionUtility;
+import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class AccountController {
     @GetMapping("/find-id")
     public ResponseEntity<IdAccountResponse> getAccountId(@RequestHeader("Authorization") String token){
 
-        String pureToken = extractToken(token);
+        String pureToken = TokenUtility.extractToken(token);
         Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
 
         if(accountId == null){
@@ -108,11 +109,5 @@ public class AccountController {
         return ResponseEntity.ok(IdAccountResponse.from(account.get().getId()));
     }
 
-    private String extractToken(String token){
-        if(token != null && token.startsWith("Bearer ")){
-            return token.substring(7);
-        }
 
-        return token;
-    }
 }
