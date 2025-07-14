@@ -1,12 +1,15 @@
 package com.msa.account.controller;
 
 
+import com.msa.account.controller.request.GatheringAccountRequest;
 import com.msa.account.controller.request.LoginAccountRequest;
 import com.msa.account.controller.request.RegisterAccountRequest;
+import com.msa.account.controller.response.AccountInfoResponse;
 import com.msa.account.controller.response.LoginAccountResponse;
 import com.msa.account.controller.response.RegisterAccountResponse;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
+import com.msa.account.service.GatheringService;
 import com.msa.account.utility.EncryptionUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import com.msa.account.redis_cache.RedisCacheService;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +34,8 @@ public class AccountController {
 
     @Autowired
     private RedisCacheService redisCacheService;
+
+    private final GatheringService gatheringService;
 
     @GetMapping("/test")
     public String test(){
@@ -68,6 +75,12 @@ public class AccountController {
         redisCacheService.setKeyAndValue(token, account.getId(), Duration.ofDays(1));
 
         return LoginAccountResponse.from(token);
+    }
+
+    //Gathering 요청
+    @PostMapping("/gathering-info")
+    public List<AccountInfoResponse> GatheringAccountRequest(@RequestBody List<GatheringAccountRequest> request){
+        return gatheringService.getAccountInfo(request);
     }
 
 //    @GetMapping("/find-id")
