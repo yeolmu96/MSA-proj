@@ -1,8 +1,9 @@
 package com.example.boardservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -22,11 +23,16 @@ public class Post {
     private int viewCount = 0;
 
     @Column(name = "recommend_count")
-    private int recommendCount = 0;
+    @Builder.Default
+    private Integer  recommendCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
+    @JsonIgnore
     private Board board;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     public Post() {
     }
