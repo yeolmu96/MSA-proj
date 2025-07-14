@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AccountInfoResponse {
 
-    private Long accountId;
+    private String userId;
     private Long gatheringId;
     private String nickname;
     private Role role;
