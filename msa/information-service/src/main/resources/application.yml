@@ -36,5 +36,5 @@ feign:
 
 logging:
   level:
-    com.msa.information.client: DEBUG
+    sp.informationservice: DEBUG
     feign: DEBUG
