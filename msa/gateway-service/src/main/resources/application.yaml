@@ -39,6 +39,14 @@ spring:
             - StripPrefix=1
             - SetRequestHeader=Accept, application/json
 
+        - id: board-service
+          uri: lb://board-service
+          predicates:
+            - Path=/api/board/**
+          filters:
+            - StripPrefix=1
+            - SetRequestHeader=Accept, application/json
+
 
       discovery:
         locator:
