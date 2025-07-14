@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter @Setter
 public class GatheringAccountRequest {
 
-    private String userId;
+    private Long accountId;
     private Long gatheringId;
     private Role role;
-    private boolean isHost;
+    private Boolean isHost;
 }

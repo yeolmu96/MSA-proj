@@ -7,15 +7,15 @@ import lombok.Setter;
 @Setter
 public class LoginAccountRequest {
 
-    private String userId;
+    private Long accountId;
     private String password;
 
     public LoginAccountRequest(){
 
     }
 
-    public LoginAccountRequest(String userId, String password) {
-        this.userId = userId;
+    public LoginAccountRequest(Long accountId, String password) {
+        this.accountId = accountId;
         this.password = password;
     }
 }

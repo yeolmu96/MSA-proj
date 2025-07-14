@@ -23,16 +23,16 @@ public class GatheringService {
     }
 
     private AccountInfoResponse toResponse(GatheringAccountRequest req) {
-        String nickname = accountRepository.findByUserId(req.getUserId())
+        String nickname = accountRepository.findById(req.getAccountId())
                 .map(Account::getNickname)
                 .orElse("Unknown");
 
         return new AccountInfoResponse(
-                req.getUserId(),
+                req.getAccountId(),
                 req.getGatheringId(),
                 nickname,
                 req.getRole(),
-                req.isHost()
+                req.getIsHost()
         );
     }
 }
