@@ -28,7 +28,7 @@ public class Gathering {
     private int maxMemberCount;
 
     @Column(name = "current_member_count", nullable = false)
-    private int currentMemberCount;
+    private int currentMemberCount = 1;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
