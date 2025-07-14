@@ -1,6 +1,7 @@
 package com.msa.account.redis_cache;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,28 @@ public class RedisCacheServiceImpl implements RedisCacheService {
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(keyAsString, valueAsString, ttl);
+    }
+
+    @Override
+    public <T> T getValueByKey(String key, Class<T> clazz) {
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        String value = ops.get(key);
+
+        if(value == null){
+            return null;
+        }
+
+        if(clazz == String.class){
+            return clazz.cast(value);
+        }
+        if(clazz == Long.class){
+            return clazz.cast(Long.parseLong(value));
+        }
+        if(clazz == Integer.class){
+            return clazz.cast(Integer.parseInt(value));
+        }
+
+        throw new IllegalArgumentException("Unsupported class " + clazz);
     }
 }
