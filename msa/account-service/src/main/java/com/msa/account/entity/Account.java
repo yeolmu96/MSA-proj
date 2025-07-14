@@ -1,4 +1,4 @@
-package com.msa.account.entitiy;
+package com.msa.account.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,13 +19,12 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String nickname;
 
     private String company;

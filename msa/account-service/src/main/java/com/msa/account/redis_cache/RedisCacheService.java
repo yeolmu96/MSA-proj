@@ -1,4 +1,4 @@
-package redis_cache;
+package com.msa.account.redis_cache;
 
 import java.time.Duration;
 
