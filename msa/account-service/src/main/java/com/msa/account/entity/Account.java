@@ -16,24 +16,31 @@ import java.util.UUID;
 @Table(name = "msa_account")
 public class Account {
 
+    //계정 고유 ID
     @Id
     @Column(name = "account_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //로그인 ID
     @Column(name = "user_id", nullable = false)
     private String userId;
 
+    //암호화 비밀번호
     @Column(nullable = false)
     private String password;
 
+    //닉네임
     @Column(nullable = false)
     private String nickname;
 
+    //속한 교육명
     private String company;
 
+    //포인트
     private Long point;
 
+    //가입일자
     @CreationTimestamp
     private LocalDateTime createdAt;
 
