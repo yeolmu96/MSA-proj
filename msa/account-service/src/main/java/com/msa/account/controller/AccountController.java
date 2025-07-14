@@ -4,13 +4,11 @@ package com.msa.account.controller;
 import com.msa.account.controller.request.GatheringAccountRequest;
 import com.msa.account.controller.request.LoginAccountRequest;
 import com.msa.account.controller.request.RegisterAccountRequest;
-import com.msa.account.controller.response.AccountInfoResponse;
-import com.msa.account.controller.response.IdAccountResponse;
-import com.msa.account.controller.response.LoginAccountResponse;
-import com.msa.account.controller.response.RegisterAccountResponse;
+import com.msa.account.controller.response.*;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.GatheringService;
+import com.msa.account.service.ReviewService;
 import com.msa.account.utility.EncryptionUtility;
 import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +38,8 @@ public class AccountController {
     private RedisCacheService redisCacheService;
 
     private final GatheringService gatheringService;
+
+    private final ReviewService reviewService;
 
     @GetMapping("/test")
     public String test(){
@@ -109,11 +109,18 @@ public class AccountController {
         return ResponseEntity.ok(IdAccountResponse.from(account.get().getId()));
     }
 
+    //로그아웃(redis delete)
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token){
         String pureToken = TokenUtility.extractToken(token);
         redisCacheService.deleteKey(pureToken);
 
         return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    //Review 요청
+    @GetMapping("/review-info")
+    public ReviewAccountInfoResponse getAccountInfo(@RequestHeader("Authorization") String token){
+        return reviewService.findAccountByToken(token);
     }
 }
