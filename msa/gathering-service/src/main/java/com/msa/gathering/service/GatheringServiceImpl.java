@@ -2,16 +2,21 @@ package com.msa.gathering.service;
 
 import com.msa.gathering.client.AccountClient;
 import com.msa.gathering.controller.request.GatheringAccountRequest;
+import com.msa.gathering.controller.request.GatheringApplicationRequest;
 import com.msa.gathering.controller.request.GatheringListRequest;
+import com.msa.gathering.controller.request.GatheringRegisterRequest;
 import com.msa.gathering.controller.response.AccountInfoResponse;
 import com.msa.gathering.entity.Gathering;
+import com.msa.gathering.entity.GatheringApplication;
 import com.msa.gathering.entity.GatheringMember;
+import com.msa.gathering.repository.GatheringApplicationRepository;
 import com.msa.gathering.repository.GatheringMemberRepository;
 import com.msa.gathering.repository.GatheringRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,6 +29,7 @@ public class GatheringServiceImpl implements GatheringService {
     private final AccountClient accountClient;
     private final GatheringRepository gatheringRepository;
     private final GatheringMemberRepository gatheringMemberRepository;
+    private final GatheringApplicationRepository gatheringApplicationRepository;
 
 
 
@@ -75,5 +81,29 @@ public class GatheringServiceImpl implements GatheringService {
 
         return result;
     }
+
+    @Transactional
+    @Override
+    public void register(GatheringRegisterRequest registerRequest) {
+
+
+        try {
+            Gathering newGathering = new Gathering(registerRequest.getAccountId(), registerRequest.getTeamName(),
+                    registerRequest.getTitle(), registerRequest.getDescription(), registerRequest.getMaxMemberCount(),
+                    registerRequest.getCurrentMemberCount());
+
+            gatheringRepository.save(newGathering);
+
+            GatheringMember newGatheringMember = new GatheringMember(registerRequest.getAccountId(),
+                    registerRequest.getRole(), newGathering, true);
+
+            gatheringMemberRepository.save(newGatheringMember);
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("모임 등록중 오류 발생", e);
+        }
+    }
+
+
 
 }
