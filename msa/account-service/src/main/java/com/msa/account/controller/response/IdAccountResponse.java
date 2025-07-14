@@ -15,4 +15,8 @@ public class IdAccountResponse {
     public IdAccountResponse(Long accountId) {
         this.accountId = accountId;
     }
+
+    public static IdAccountResponse from(Long accountId) {
+        return new IdAccountResponse(accountId);
+    }
 }

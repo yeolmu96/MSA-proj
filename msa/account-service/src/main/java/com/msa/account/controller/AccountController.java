@@ -58,8 +58,8 @@ public class AccountController {
     //로그인(userToken 반환)
     @PostMapping("/login")
     public LoginAccountResponse login(@RequestBody LoginAccountRequest request){
-        Long accountId = request.getAccountId();
-        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        String userId = request.getUserId();
+        Optional<Account> optionalAccount = accountRepository.findByUserId(userId);
 
         if (optionalAccount.isEmpty()) {
             return new LoginAccountResponse(null);
@@ -104,7 +104,7 @@ public class AccountController {
             throw new RuntimeException("사용자가 존재하지 않음");
         }
 
-        return ResponseEntity.ok(new IdAccountResponse(account.get().getId()));
+        return ResponseEntity.ok(IdAccountResponse.from(account.get().getId()));
     }
 
     private String extractToken(String token){
