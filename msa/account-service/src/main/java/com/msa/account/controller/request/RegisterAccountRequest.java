@@ -1,6 +1,7 @@
 package com.msa.account.controller.request;
 
-import com.msa.account.entitiy.Account;
+import com.msa.account.entity.Account;
+import com.msa.account.utility.EncryptionUtility;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,6 @@ public class RegisterAccountRequest {
     }
 
     public Account toAccount() {
-        return new Account(userId, password);
+        return new Account(userId, EncryptionUtility.encode(password));
     }
 }

@@ -1,6 +1,6 @@
 package com.msa.account.controller.response;
 
-import com.msa.account.entitiy.Account;
+import com.msa.account.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 
