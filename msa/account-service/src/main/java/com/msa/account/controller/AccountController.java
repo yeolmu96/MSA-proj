@@ -8,6 +8,7 @@ import com.msa.account.controller.response.*;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.GatheringService;
+import com.msa.account.service.MyAccountService;
 import com.msa.account.service.ReviewService;
 import com.msa.account.utility.EncryptionUtility;
 import com.msa.account.utility.TokenUtility;
@@ -36,10 +37,9 @@ public class AccountController {
 
     @Autowired
     private RedisCacheService redisCacheService;
-
     private final GatheringService gatheringService;
-
     private final ReviewService reviewService;
+    private final MyAccountService myAccountService;
 
     @GetMapping("/test")
     public String test(){
@@ -122,5 +122,11 @@ public class AccountController {
     @GetMapping("/review-info")
     public ReviewAccountInfoResponse getAccountInfo(@RequestHeader("Authorization") String token){
         return reviewService.findAccountByToken(token);
+    }
+
+    //내 정보 조회
+    @GetMapping("/me")
+    public MyAccountInfoResponse getMyAccountInfo(@RequestHeader("Authorization") String token){
+        return myAccountService.getMyAccountInfo(token);
     }
 }

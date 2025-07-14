@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
+/*
+Review 응답
+ */
 @Getter @Setter
 @NoArgsConstructor
 @ToString
