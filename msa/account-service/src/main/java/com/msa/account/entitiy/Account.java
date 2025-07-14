@@ -12,16 +12,26 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @ToString
+@Table(name = "msa_account")
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String userId;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String nickname;
+
     private String company;
+
     private Long point;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
