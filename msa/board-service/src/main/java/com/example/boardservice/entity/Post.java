@@ -19,16 +19,18 @@ public class Post {
 
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "view_count")
     private int viewCount = 0;
 
     @Column(name = "recommend_count")
-    @Builder.Default
-    private Integer  recommendCount = 0;
+    private Integer recommendCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    @JsonIgnore
     private Board board;
 
     @Enumerated(EnumType.STRING)
@@ -37,11 +39,20 @@ public class Post {
     public Post() {
     }
 
-    public Post(String title, String content, int viewCount, int recommendCount, Board board) {
+    @Builder
+    public Post(String title, String content, int viewCount, int recommendCount, Board board, User user, Category category) {
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
         this.recommendCount = recommendCount;
         this.board = board;
+        this.category = category;
+        this.user = user;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.recommendCount == null) this.recommendCount = 0;
+        if (this.viewCount == 0) this.viewCount = 0;
     }
 }

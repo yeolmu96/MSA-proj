@@ -10,4 +10,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByBoardId(Long boardId);
 
     Optional<Post> findByTitle(String title);
+
+    List<Post> findByRecommendCountGreaterThanEqualOrderByRecommendCountDesc(int count);
 }
