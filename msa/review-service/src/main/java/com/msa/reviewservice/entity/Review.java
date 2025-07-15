@@ -24,24 +24,28 @@ public class Review {
 
     private Long accountId;
     private String nickname;
+    private Long trainingId;
     private String trainingName;
     private int trainingPeriod;
     private NcsType trainingType;
     private String title;
     private String content;
     private Integer rating;
+    private String imagePath;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public Review(Long accountId, String nickname, String trainingName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating) {
+    public Review(Long accountId, String nickname, Long trainingId, String trainingName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, String imagePath) {
         this.accountId = accountId;
         this.nickname = nickname;
+        this.trainingId = trainingId;
         this.trainingName = trainingName;
         this.trainingPeriod = trainingPeriod;
         this.trainingType = trainingType;
         this.title = title;
         this.content = content;
         this.rating = rating;
+        this.imagePath = imagePath;
     }
 }

@@ -26,7 +26,7 @@ public class CreateReviewRequest {
     @Max(value = 5, message = "1~5의 숫자만 입력 가능합니다.")
     private Integer rating;
 
-    public Review toReview(Long accountId, String nickname, String trainingName, int trainingPeriod, NcsType trainingType) {
-        return new Review(accountId, nickname, trainingName, trainingPeriod, trainingType, title, content, rating);
+    public Review toReview(Long accountId, String nickname,Long trainingId, String trainingName, int trainingPeriod, NcsType trainingType, String imagePath) {
+        return new Review(accountId, nickname, trainingId, trainingName, trainingPeriod, trainingType, title, content, rating, imagePath);
     }
 }
