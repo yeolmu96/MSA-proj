@@ -124,11 +124,11 @@ public class AccountService {
             throw new IllegalArgumentException("교육 코드를 반드시 입력해야 합니다.");
         }
 
-        //교육 코드 존재 여부 검증
-        boolean exist = institutionClient.checkInstitutionExists(request.getTrainingId());
-        if(!exist){
-            throw new IllegalArgumentException("존재하지 않는 교육 코드입니다.");
-        }
+//        //교육 코드 존재 여부 검증
+//        boolean exist = institutionClient.checkInstitutionExists(request.getTrainingId());
+//        if(!exist){
+//            throw new IllegalArgumentException("존재하지 않는 교육 코드입니다.");
+//        }
 
         //userId 중복 검사
         if(accountRepository.existsByUserId(request.getUserId())){
