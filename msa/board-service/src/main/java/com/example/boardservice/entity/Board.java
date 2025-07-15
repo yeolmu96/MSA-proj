@@ -21,4 +21,6 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Post> posts;
+
+
 }

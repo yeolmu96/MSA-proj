@@ -88,12 +88,14 @@ public class PostController {
         return postRepository.save(post);
     }
 
+    // 게시물 삭제
     @PostMapping("/delete")
     public String deletePost(@RequestBody DeleteRequest request) {
         postRepository.deleteById(request.getId());
         return "삭제되었습니다.";
     }
 
+    // 게시물 업데이트
     @PostMapping("/update")
     public Post updatePost(@RequestBody UpdateRequest request) {
         String content = request.getContent();
@@ -110,5 +112,10 @@ public class PostController {
 
         return postRepository.save(post);
 
+    }
+
+    @GetMapping("/best")
+    public List<Post> getBestPosts() {
+        return postRepository.findByRecommendCountGreaterThanEqualOrderByRecommendCountDesc(10);
     }
 }

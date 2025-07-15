@@ -10,9 +10,14 @@ public enum Category {
     MIND("정신치료·심리상담"),
     EMPLOYMENT("채용해요"),
     COMPANYLIFE("회사생활"),
-    INTEREST("취미생활"),
     TRAVEL("여행"),
-    SPORT("스포츠");
+    SPORT("스포츠"),
+    WEB("웹개발"),
+    CLOUD("클라우드"),
+    DATAAI("데이터,AI"),
+    GAME("게임,블록체인");
+
+
 
     private final String description;
 
