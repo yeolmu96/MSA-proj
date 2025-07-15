@@ -43,6 +43,19 @@ public class ReviewController {
         return reviewRepository.findAll();
     }
 
+    @PostMapping("/list-by/{userId}")
+    public List<Review> listbyuser(@RequestHeader("Authorization") String token, @PathVariable Long userId) {
+        String pureToken = extractToken(token);
+        IdAccountResponse response = accountClient.getAccountId("Bearer "+pureToken);
+        Long accountId = response.getAccountId();
+
+        if(userId != accountId) {
+            throw new RuntimeException("사용자 외에는 조회할 수 없습니다.");
+        }
+
+        return reviewRepository.findByAccountId(userId);
+    }
+
     @PostMapping("/update")
     public UpdateReviewResponse update(@RequestHeader("Authorization") String token, @RequestBody UpdateReviewRequest request) {
         log.info("Update review request: {}", request);
