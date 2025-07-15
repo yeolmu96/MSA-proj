@@ -11,17 +11,17 @@ public class AccountInfoResponse {
 
     private Long GatheringId;
 
-    private String nickName;
+    private String nickname;
 
     private Role role;
 
-    private boolean isHost;
+    private Boolean isHost;
 
 
     public AccountInfoResponse(Long accountId, Long gatheringId, String nickName, Role role, boolean isHost) {
         this.accountId = accountId;
         GatheringId = gatheringId;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.role = role;
         this.isHost = isHost;
     }

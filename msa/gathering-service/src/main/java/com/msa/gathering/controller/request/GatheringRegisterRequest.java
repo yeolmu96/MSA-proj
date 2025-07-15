@@ -4,6 +4,8 @@ package com.msa.gathering.controller.request;
 import com.msa.gathering.entity.Role;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class GatheringRegisterRequest {
 
@@ -21,6 +23,11 @@ public class GatheringRegisterRequest {
 
     private int currentMemberCount;
 
+    private List<Long> techStacks;
+
+    private List<Long> hostTechStacks;
+
+    private List<RoleRequest> roleRequests;
 
 
 

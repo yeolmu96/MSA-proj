@@ -5,11 +5,14 @@ import com.msa.account.controller.response.AccountInfoResponse;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GatheringService {
@@ -23,9 +26,16 @@ public class GatheringService {
     }
 
     private AccountInfoResponse toResponse(GatheringAccountRequest req) {
-        String nickname = accountRepository.findById(req.getAccountId())
-                .map(Account::getNickname)
-                .orElse("Unknown");
+
+        log.info("GatheringAccountRequest:{}",req.toString());
+
+        Account account = accountRepository.findById(req.getAccountId())
+                .orElseThrow(() -> new RuntimeException("회원 못찾음"));
+
+        String nickname = account.getNickname();
+
+        log.info("nickname. :{}", nickname);
+        log.info("account. :{}", account.toString());
 
         return new AccountInfoResponse(
                 req.getAccountId(),

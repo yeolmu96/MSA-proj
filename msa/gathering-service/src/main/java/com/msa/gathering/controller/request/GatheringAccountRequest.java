@@ -12,7 +12,7 @@ public class GatheringAccountRequest {
 
     private Role role;
 
-    private boolean isHost;
+    private Boolean isHost;
 
     public GatheringAccountRequest(Long accountId, Long gatheringId, Role role, boolean isHost) {
         this.accountId = accountId;

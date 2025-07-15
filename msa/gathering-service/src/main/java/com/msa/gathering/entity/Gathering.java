@@ -38,6 +38,11 @@ public class Gathering {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+
+    public void setCurrentMemberCount(int currentMemberCount) {
+        this.currentMemberCount = currentMemberCount;
+    }
+
     public Gathering(Long hostId, String teamName, String title, String description, int maxMemberCount, int currentMemberCount) {
         this.hostId = hostId;
         this.teamName = teamName;
