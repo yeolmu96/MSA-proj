@@ -8,6 +8,5 @@ import lombok.Setter;
 @Setter
 public class UpdatePointRequest {
     private Long accountId;
-    private Integer point; //증감할 포인트
     private PointReason reason; //(예: REVIEW_WRITE, REVIEW_READ, GATHERING_CREATE 등)
 }

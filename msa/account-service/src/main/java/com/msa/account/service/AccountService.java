@@ -10,6 +10,7 @@ import com.msa.account.redis_cache.RedisCacheService;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.utility.EncryptionUtility;
 import com.msa.account.utility.PasswordPolicyValidator;
+import com.msa.account.utility.PointPolicy;
 import com.msa.account.utility.TokenUtility;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -165,7 +166,32 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("계정을 찾을 수 없습니다."));
 
         Long beforePoint = account.getPoint() == null ? 0 : account.getPoint();
-        Long afterPoint = beforePoint + request.getPoint();
+        int pointChange;
+
+        switch (request.getReason()) {
+            case REVIEW_WRITE:
+                pointChange = PointPolicy.REVIEW_WRITE;
+                break;
+            case REVIEW_READ:
+                pointChange = PointPolicy.REVIEW_READ;
+                break;
+            case GATHERING_CREATE:
+                pointChange = PointPolicy.GATHERING_CREATE;
+                break;
+            case POST_RECOMMEND:
+                pointChange = PointPolicy.POST_RECOMMEND;
+                break;
+            case QNA_ANSWER:
+                pointChange = PointPolicy.QNA_ANSWER;
+                break;
+            case NICKNAME_CHANGE:
+                pointChange = PointPolicy.NICKNAME_CHANGE;
+                break;
+            default:
+                throw new IllegalArgumentException("포인트 사유가 올바르지 않습니다.");
+        }
+
+        Long afterPoint = beforePoint + pointChange;
 
         if(afterPoint < 0){
             throw new IllegalArgumentException("포인트가 부족합니다.");
@@ -177,7 +203,7 @@ public class AccountService {
         return new UpdatePointResponse(
                 account.getId(),
                 afterPoint,
-                request.getReason() + "처리 완료"
+                request.getReason() + " 처리 완료"
         );
     }
 }

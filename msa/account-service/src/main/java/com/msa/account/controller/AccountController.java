@@ -152,8 +152,8 @@ public class AccountController {
     }
 
     //교육 기관명 수정
-    @PatchMapping("/company")
-    public ResponseEntity<Map<String, Long>> updateCompany(
+    @PatchMapping("/training")
+    public ResponseEntity<Map<String, Long>> updateTraining(
             @RequestHeader("Authorization") String token,
             @RequestBody UpdateTrainingIdRequest request
     ){
@@ -178,7 +178,7 @@ public class AccountController {
     }
 
     //포인트 증감
-    @PostMapping("update-point")
+    @PostMapping("/update-point")
     public ResponseEntity<UpdatePointResponse> updatePoint(@RequestBody UpdatePointRequest request){
         UpdatePointResponse response = accountService.updatePoint(request);
         return ResponseEntity.ok(response);
