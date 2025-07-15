@@ -183,4 +183,11 @@ public class AccountController {
         UpdatePointResponse response = accountService.updatePoint(request);
         return ResponseEntity.ok(response);
     }
+
+    //회원탈퇴
+    @DeleteMapping("/account-delete")
+    public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization") String token){
+        accountService.deleteAccount(token);
+        return ResponseEntity.ok("계정이 완전히 삭제되었습니다.");
+    }
 }
