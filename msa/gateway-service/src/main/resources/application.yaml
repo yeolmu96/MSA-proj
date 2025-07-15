@@ -47,6 +47,13 @@ spring:
             - StripPrefix=1
             - SetRequestHeader=Accept, application/json
 
+        - id: review-service
+          uri: lb://review-service
+          predicates:
+            - Path=/api/review/**
+          filters:
+            - StripPrefix=1
+            - SetRequestHeader=Accept, application/json
 
       discovery:
         locator:
