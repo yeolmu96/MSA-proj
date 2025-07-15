@@ -11,6 +11,8 @@ public class RegisterAccountRequest {
 
     private String userId;
     private String password;
+    private String nickname;
+    private String company;
 
     public RegisterAccountRequest() {
 
@@ -21,7 +23,16 @@ public class RegisterAccountRequest {
         this.password = password;
     }
 
-    public Account toAccount() {
-        return new Account(userId, EncryptionUtility.encode(password));
+    public RegisterAccountRequest(String userId, String password, String nickname) {
+        this.userId = userId;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
+    public RegisterAccountRequest(String userId, String password, String nickname, String company) {
+        this.userId = userId;
+        this.password = password;
+        this.nickname = nickname;
+        this.company = company;
     }
 }
