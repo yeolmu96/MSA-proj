@@ -74,4 +74,38 @@ public class AccountService {
         //닉네임 변경
         account.setNickname(newNickname);
     }
+
+    //교육 기관명 수정
+    @Transactional
+    public String updateCompany(String token, String newCompany) {
+        String pureToken = TokenUtility.extractToken(token);
+
+        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
+        if(accountId == null){
+            throw new RuntimeException("인증이 필요합니다.");
+        }
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        account.setCompany(newCompany);
+
+        return account.getCompany();
+    }
+
+    //포인트 조회
+    @Transactional(readOnly = true)
+    public Long getPoint(String token) {
+        String pureToken = TokenUtility.extractToken(token);
+
+        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
+        if(accountId == null){
+            throw new RuntimeException("인증이 필요합니다.");
+        }
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        return account.getPoint();
+    }
 }
