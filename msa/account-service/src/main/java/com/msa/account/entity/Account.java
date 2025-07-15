@@ -51,7 +51,6 @@ public class Account {
     public Account(String userId, String password) {
         this.userId = userId;
         this.password = password;
-        this.nickname = generateRandomNickname();
     }
 
     public Account(String userId, String password, String nickname, String company, Long point, LocalDateTime createdAt) {
@@ -61,9 +60,5 @@ public class Account {
         this.company = company;
         this.point = point;
         this.createdAt = createdAt;
-    }
-
-    private String generateRandomNickname() {
-        return "user_" + UUID.randomUUID().toString().substring(0, 8);
     }
 }
