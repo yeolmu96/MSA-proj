@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import sp.informationservice.controller.request.InstitutionRequest;
 import sp.informationservice.controller.request.TrainingRequest;
 import sp.informationservice.enums.NcsType;
 
