@@ -5,7 +5,7 @@ start cmd /k "cd eureka-server && gradlew.bat bootRun"
 
 timeout /t 5 /nobreak > nul
 
-set services=example-service example2-service account-service
+set services=account-service board-service information-service
 
 for %%s in (%services%) do (
     echo ========== ▶ 서비스 서버 실행: %%s ... ==============

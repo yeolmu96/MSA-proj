@@ -176,4 +176,11 @@ public class AccountController {
 
         return ResponseEntity.ok(response);
     }
+
+    //포인트 증감
+    @PostMapping("update-point")
+    public ResponseEntity<UpdatePointResponse> updatePoint(@RequestBody UpdatePointRequest request){
+        UpdatePointResponse response = accountService.updatePoint(request);
+        return ResponseEntity.ok(response);
+    }
 }
