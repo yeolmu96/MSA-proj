@@ -4,16 +4,30 @@ server:
 spring:
   application:
     name: gateway-service
+  main:
+    web-application-type: reactive
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: false
       routes:
         - id: example-service
           uri: lb://example-service
           predicates:
             - Path=/api/example/**
           filters:
-              - StripPrefix=1
-              - SetRequestHeader=Accept, application/json
+            - StripPrefix=1
+            - SetRequestHeader=Accept, application/json
 
         - id: example2-service
           uri: lb://example2-service
@@ -53,6 +67,22 @@ spring:
             - Path=/api/review/**
           filters:
             - StripPrefix=1
+            - SetRequestHeader=Accept, application/json
+
+        - id: information-service
+          uri: lb://information-service
+          predicates:
+            - Path=/api/information/**
+          filters:
+            - StripPrefix=2
+            - SetRequestHeader=Accept, application/json
+
+        - id: qna-service
+          uri: lb://qna-service
+          predicates:
+            - Path=/api/qna/**
+          filters:
+            - StripPrefix=2
             - SetRequestHeader=Accept, application/json
 
       discovery:
