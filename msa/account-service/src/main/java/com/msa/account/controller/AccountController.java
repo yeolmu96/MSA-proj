@@ -54,6 +54,7 @@ public class AccountController {
         Optional<Account> optionalAccount = accountRepository.findByUserId(userId);
 
         if (optionalAccount.isEmpty()) {
+            accountService.logActivity(null, "LOGIN_FAIL", "아이디 없음");
             return new LoginAccountResponse(null);
         }
 
@@ -63,11 +64,14 @@ public class AccountController {
         boolean matched = EncryptionUtility.matches(requestedPassword, account.getPassword());
 
         if(!matched){
+            accountService.logActivity(account.getId(), "LOGIN_FAIL", "비밀번호 불일치");
             return new LoginAccountResponse(null);
         }
 
+        //로그인 성공
         String token = UUID.randomUUID().toString();
         redisCacheService.setKeyAndValue(token, account.getId(), Duration.ofDays(1));
+        accountService.logActivity(account.getId(), "LOGIN", "로그인 성공");
 
         return LoginAccountResponse.from(token);
     }
@@ -104,7 +108,13 @@ public class AccountController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token){
         String pureToken = TokenUtility.extractToken(token);
+        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
+
         redisCacheService.deleteKey(pureToken);
+
+        if(accountId != null){
+            accountService.logActivity(accountId, "LOGOUT", "로그아웃 완료");
+        }
 
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
@@ -187,7 +197,14 @@ public class AccountController {
     //회원탈퇴
     @DeleteMapping("/account-delete")
     public ResponseEntity<String> deleteAccount(@RequestHeader("Authorization") String token){
+        String pureToken = TokenUtility.extractToken(token);
+        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
         accountService.deleteAccount(token);
+
+        if(accountId != null){
+            accountService.logActivity(accountId, "DELETE", "계정 삭제 완료");
+        }
+
         return ResponseEntity.ok("계정이 완전히 삭제되었습니다.");
     }
 }

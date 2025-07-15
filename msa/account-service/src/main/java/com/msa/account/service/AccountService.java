@@ -5,8 +5,10 @@ import com.msa.account.controller.request.RegisterAccountRequest;
 import com.msa.account.controller.request.UpdatePointRequest;
 import com.msa.account.controller.response.UpdatePointResponse;
 import com.msa.account.entity.Account;
+import com.msa.account.entity.AccountActivityLog;
 import com.msa.account.exception.DuplicateUserIdException;
 import com.msa.account.redis_cache.RedisCacheService;
+import com.msa.account.repository.AccountActivityLogRepository;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.utility.EncryptionUtility;
 import com.msa.account.utility.PasswordPolicyValidator;
@@ -14,6 +16,7 @@ import com.msa.account.utility.PointPolicy;
 import com.msa.account.utility.TokenUtility;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +27,18 @@ public class AccountService {
     private final RedisCacheService redisCacheService;
     private final AccountRepository accountRepository;
     private final NicknameService nicknameService;
-    private final InstitutionClient institutionClient;
+
+    @Autowired
+    private AccountActivityLogRepository accountActivityLogRepository;
+
+    //로그 남기기
+    public void logActivity(Long accountId, String activityType, String description){
+        AccountActivityLog log = new AccountActivityLog();
+        log.setAccountId(accountId);
+        log.setActivityType(activityType);
+        log.setDescription(description);
+        accountActivityLogRepository.save(log);
+    }
 
     //비밀번호 변경
     public void changePassword(String token, String currentPassword, String newPassword) {
