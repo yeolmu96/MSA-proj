@@ -7,7 +7,6 @@ import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.*;
 import com.msa.account.utility.EncryptionUtility;
-import com.msa.account.utility.PasswordPolicyValidator;
 import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,6 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private RedisCacheService redisCacheService;
     private final GatheringService gatheringService;
@@ -118,7 +116,7 @@ public class AccountController {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다. Id: " +  accountId));
 
-        return new ReviewAccountInfoResponse(account.getNickname(), account.getCompany());
+        return new ReviewAccountInfoResponse(account.getNickname(), account.getTrainingId());
     }
 
     //내 정보 조회
@@ -158,9 +156,9 @@ public class AccountController {
     @PatchMapping("/company")
     public ResponseEntity<Map<String, String>> updateCompany(
             @RequestHeader("Authorization") String token,
-            @RequestBody UpdateCompanyRequest request
+            @RequestBody UpdateTrainingIdRequest request
     ){
-        String updatedCompany = accountService.updateCompany(token, request.getNewCompany());
+        String updatedCompany = accountService.updateCompany(token, request.getNewTrainingId());
 
         Map<String, String> response = new HashMap<>();
         response.put("company", updatedCompany);

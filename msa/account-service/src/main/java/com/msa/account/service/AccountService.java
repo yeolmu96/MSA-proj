@@ -78,9 +78,9 @@ public class AccountService {
         account.setNickname(newNickname);
     }
 
-    //교육 기관명 수정
+    //교육 기관 코드 수정
     @Transactional
-    public String updateCompany(String token, String newCompany) {
+    public Long updateTrainingId(String token, Long newTrainingId) {
         String pureToken = TokenUtility.extractToken(token);
 
         Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
@@ -91,9 +91,9 @@ public class AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        account.setCompany(newCompany);
+        account.setTrainingId(newTrainingId);
 
-        return account.getCompany();
+        return account.getTrainingId();
     }
 
     //포인트 조회
@@ -132,7 +132,7 @@ public class AccountService {
                 request.getUserId(),
                 EncryptionUtility.encode(request.getPassword()),
                 nickname,
-                request.getCompany(),
+                request.getTrainingId(),
                 500L, // 초기 포인트 지급
                 null // 생성일자는 @CreationTimestamp로 자동 생성
         );

@@ -30,7 +30,7 @@ public class MyAccountService {
                 account.getId(),
                 account.getUserId(),
                 account.getNickname(),
-                account.getCompany(),
+                account.getTrainingId(),
                 account.getPoint(),
                 account.getCreatedAt()
         );

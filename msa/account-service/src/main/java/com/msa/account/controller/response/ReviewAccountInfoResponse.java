@@ -13,10 +13,10 @@ Review 응답
 public class ReviewAccountInfoResponse {
 
     private String nickname;
-    private String institutionType;
+    private Long trainingId;
 
-    public ReviewAccountInfoResponse(String nickname, String institutionType) {
+    public ReviewAccountInfoResponse(String nickname, Long trainingId) {
         this.nickname = nickname;
-        this.institutionType = institutionType;
+        this.trainingId = trainingId;
     }
 }

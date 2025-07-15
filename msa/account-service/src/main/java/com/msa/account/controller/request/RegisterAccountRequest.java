@@ -12,7 +12,7 @@ public class RegisterAccountRequest {
     private String userId;
     private String password;
     private String nickname;
-    private String company;
+    private Long trainingId;
 
     public RegisterAccountRequest() {
 
@@ -29,10 +29,10 @@ public class RegisterAccountRequest {
         this.nickname = nickname;
     }
 
-    public RegisterAccountRequest(String userId, String password, String nickname, String company) {
+    public RegisterAccountRequest(String userId, String password, String nickname, Long trainingId) {
         this.userId = userId;
         this.password = password;
         this.nickname = nickname;
-        this.company = company;
+        this.trainingId = trainingId;
     }
 }

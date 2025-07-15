@@ -11,7 +11,7 @@ public class RegisterAccountResponse {
 
     private String userId;
     private String nickname;
-    private String company;
+    private Long trainingId;
     private Long point;
 
     public RegisterAccountResponse() {
@@ -22,7 +22,7 @@ public class RegisterAccountResponse {
         return new RegisterAccountResponse(
                 account.getUserId(),
                 account.getNickname(),
-                account.getCompany(),
+                account.getTrainingId(),
                 account.getPoint()
         );
     }

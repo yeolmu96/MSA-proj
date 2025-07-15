@@ -7,7 +7,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/msa2?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true
-    username: msa1
+    username: msa
     password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
 

@@ -34,8 +34,9 @@ public class Account {
     @Column(nullable = false)
     private String nickname;
 
-    //속한 교육명
-    private String company;
+    //속한 교육 코드
+    @Column(name = "training_id", nullable = false)
+    private Long trainingId;
 
     //포인트
     private Long point;
@@ -48,16 +49,17 @@ public class Account {
 
     }
 
-    public Account(String userId, String password) {
+    public Account(String userId, String password, Long trainingId) {
         this.userId = userId;
         this.password = password;
+        this.trainingId = trainingId;
     }
 
-    public Account(String userId, String password, String nickname, String company, Long point, LocalDateTime createdAt) {
+    public Account(String userId, String password, String nickname, Long trainingId, Long point, LocalDateTime createdAt) {
         this.userId = userId;
         this.password = password;
         this.nickname = nickname;
-        this.company = company;
+        this.trainingId = trainingId;
         this.point = point;
         this.createdAt = createdAt;
     }
