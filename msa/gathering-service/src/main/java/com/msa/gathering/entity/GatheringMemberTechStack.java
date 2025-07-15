@@ -17,7 +17,7 @@ public class GatheringMemberTechStack {
     @ManyToOne(fetch = FetchType.LAZY)
     private GatheringMember gatheringMember;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private TechStack techStack;
 
     public GatheringMemberTechStack(GatheringMember gatheringMember, TechStack techStack) {

@@ -7,20 +7,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class GatheringTechStack {
+public class GatheringApplicationTechStack {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Gathering gathering;
+    private GatheringApplication gatheringApplication;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private TechStack techStack;
 
-    public GatheringTechStack(Gathering gathering, TechStack techStack) {
-        this.gathering = gathering;
+    public GatheringApplicationTechStack(GatheringApplication gatheringApplication, TechStack techStack) {
+        this.gatheringApplication = gatheringApplication;
         this.techStack = techStack;
     }
 }

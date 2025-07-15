@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: review-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/msa_review?allowpublickeyretrieval=true&usessl=false&serverTimezone=UTC
+    username: msa
+    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    dialect: org.hibernate.dialect.MySQL8Dialect
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8087
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+feign:
+  hystrix:
+    enabled: false
+  httpclient:
+    enabled: true
+  jackson:
+    enabled: true
+
+logging:
+  level:
+    com.msa.reviewservice.client: DEBUG
+    feign: DEBUG
+

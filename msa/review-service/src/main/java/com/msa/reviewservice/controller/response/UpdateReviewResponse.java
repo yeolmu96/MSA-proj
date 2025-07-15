@@ -1,0 +1,38 @@
+package com.msa.reviewservice.controller.response;
+
+import com.msa.reviewservice.entity.Review;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@ToString
+public class UpdateReviewResponse {
+    private Long id;
+
+    private String nickname;
+    private String company;
+    private String title;
+    private String content;
+    private Integer rating;
+    private LocalDateTime createdAt;
+
+    public UpdateReviewResponse() {}
+
+    public UpdateReviewResponse(Long id, String nickname, String company, String title, String content, Integer rating, LocalDateTime createdAt) {
+        this.id = id;
+        this.nickname = nickname;
+        this.company = company;
+        this.title = title;
+        this.content = content;
+        this.rating = rating;
+        this.createdAt = createdAt;
+    }
+
+    public static UpdateReviewResponse from(Review review) {
+        return new UpdateReviewResponse(review.getId(), review.getNickname(), review.getCompany(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
+    }
+}
