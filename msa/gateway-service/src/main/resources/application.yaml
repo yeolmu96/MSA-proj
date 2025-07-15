@@ -8,18 +8,20 @@ spring:
     web-application-type: reactive
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
       globalcors:
-        corsConfigurations:
+        cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOrigins: 'http://localhost:3000'
+            allow-credentials: true
+            allowedHeaders: '*'
             allowedMethods:
+              - PUT
               - GET
               - POST
-              - PUT
               - DELETE
               - OPTIONS
-            allowedHeaders: "*"
-            allowCredentials: false
       routes:
         - id: example-service
           uri: lb://example-service
@@ -89,9 +91,6 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-
-
-
 eureka:
   client:
     register-with-eureka: true
