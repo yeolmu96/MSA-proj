@@ -152,8 +152,8 @@ public class AccountController {
     }
 
     //교육 기관명 수정
-    @PatchMapping("/company")
-    public ResponseEntity<Map<String, Long>> updateCompany(
+    @PatchMapping("/training")
+    public ResponseEntity<Map<String, Long>> updateTraining(
             @RequestHeader("Authorization") String token,
             @RequestBody UpdateTrainingIdRequest request
     ){
