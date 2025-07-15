@@ -9,10 +9,10 @@ import com.msa.gathering.controller.response.AccountInfoResponse;
 import com.msa.gathering.entity.Gathering;
 import com.msa.gathering.entity.GatheringApplication;
 import com.msa.gathering.entity.GatheringMember;
-import com.msa.gathering.repository.GatheringApplicationRepository;
-import com.msa.gathering.repository.GatheringMemberRepository;
-import com.msa.gathering.repository.GatheringRepository;
+import com.msa.gathering.entity.GatheringTechStack;
+import com.msa.gathering.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GatheringServiceImpl implements GatheringService {
@@ -30,6 +31,8 @@ public class GatheringServiceImpl implements GatheringService {
     private final GatheringRepository gatheringRepository;
     private final GatheringMemberRepository gatheringMemberRepository;
     private final GatheringApplicationRepository gatheringApplicationRepository;
+    private final GatheringTechStackRepository gatheringTechStackRepository;
+    private final TechStackRepository techStackRepository;
 
 
 
@@ -98,6 +101,13 @@ public class GatheringServiceImpl implements GatheringService {
                     registerRequest.getRole(), newGathering, true);
 
             gatheringMemberRepository.save(newGatheringMember);
+
+
+            registerRequest.getTechStacks().forEach(stack -> {
+                gatheringTechStackRepository.save(new GatheringTechStack(
+                        newGathering,
+                        techStackRepository.findById(stack).get()));
+            });
 
         } catch (DataAccessException e) {
             throw new RuntimeException("모임 등록중 오류 발생", e);

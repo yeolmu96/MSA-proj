@@ -21,7 +21,7 @@ public class GatheringApplicationServiceImpl implements GatheringApplicationServ
 
     private final GatheringApplicationRepository gatheringApplicationRepository;
     private final GatheringRepository gatheringRepository;
-    private final GatheringTechStackRepository gatheringTechStackRepository;
+    private final GatheringApplicationTechStackRepository gatheringApplicationTechStackRepository;
     private final GatheringMemberRepository gatheringMemberRepository;
     private final GatheringMemberTechStackRepository gatheringMemberTechStackRepository;
     private final TechStackRepository techStackRepository;
@@ -43,7 +43,7 @@ public class GatheringApplicationServiceImpl implements GatheringApplicationServ
             log.info("찾아진 게더 아이디 : {}", gathering.getId());
 
             req.getTechStacks().forEach(stack -> {
-                gatheringTechStackRepository.save(new GatheringTechStack(
+                gatheringApplicationTechStackRepository.save(new GatheringTechStack(
                         gathering,
                         techStackRepository.findById(stack).get()));
             });
