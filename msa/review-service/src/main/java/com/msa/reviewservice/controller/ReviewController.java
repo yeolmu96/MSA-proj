@@ -43,6 +43,29 @@ public class ReviewController {
         return reviewRepository.findAll();
     }
 
+    @PostMapping("/update")
+    public UpdateReviewResponse update(@RequestHeader("Authorization") String token, @RequestBody UpdateReviewRequest request) {
+        log.info("Update review request: {}", request);
+
+        String pureToken = extractToken(token);
+        IdAccountResponse response = accountClient.getAccountId("Bearer "+pureToken);
+        Long accountId = response.getAccountId();
+
+        Long requestedReviewId = request.getReviewId();
+        Review foundReview = reviewRepository.findById(requestedReviewId).orElseThrow(() -> new RuntimeException("존재하지 않는 리뷰입니다."));
+
+        if(!foundReview.getId().equals(requestedReviewId)) {
+            throw new RuntimeException("리뷰를 등록한 사람이 아닙니다.");
+        }
+
+        foundReview.setTitle(request.getTitle());
+        foundReview.setContent(request.getContent());
+        foundReview.setRating(request.getRating());
+
+        Review updatedReview = reviewRepository.save(foundReview);
+        return UpdateReviewResponse.from(updatedReview);
+    }
+
     private String extractToken(String token) {
         if(token != null && token.startsWith("Bearer ")) {
             return token.substring(7);
