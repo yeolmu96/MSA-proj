@@ -206,4 +206,22 @@ public class AccountService {
                 request.getReason() + " 처리 완료"
         );
     }
+
+    //회원탈퇴(hard-delete)
+    @Transactional
+    public void deleteAccount(String token){
+        String pureToken = TokenUtility.extractToken(token);
+
+        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
+        if(accountId == null){
+            throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
+        }
+
+        if(!accountRepository.existsById(accountId)){
+            throw new IllegalArgumentException("계정을 찾을 수 없습니다.");
+        }
+
+        accountRepository.deleteById(accountId);
+        redisCacheService.deleteKey(pureToken);
+    }
 }
