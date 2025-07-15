@@ -4,6 +4,7 @@ import com.msa.account.entity.Account;
 import com.msa.account.utility.EncryptionUtility;
 import lombok.Getter;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ public class RegisterAccountRequest {
     private String userId;
     private String password;
     private String nickname;
+    @NotNull
     private Long trainingId;
 
     public RegisterAccountRequest() {
