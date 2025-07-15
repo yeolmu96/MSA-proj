@@ -50,6 +50,11 @@ public class ReviewController {
         return reviewRepository.findAll();
     }
 
+    @GetMapping("/list-by/{trainingName}")
+    public List<Review> listByTrainingId(@PathVariable String trainingName) {
+        return reviewRepository.findByTrainingName(trainingName);
+    }
+
     @PostMapping("/list-by/{userId}")
     public List<Review> listbyuser(@RequestHeader("Authorization") String token, @PathVariable Long userId) {
         String pureToken = extractToken(token);
