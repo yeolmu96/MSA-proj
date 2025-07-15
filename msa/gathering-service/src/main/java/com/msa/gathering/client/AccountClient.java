@@ -12,6 +12,6 @@ import java.util.List;
 public interface AccountClient {
 
 
-    @PostMapping("/account/find-by-ids")
+    @PostMapping("/account/gathering-info")
     List<AccountInfoResponse> getList(@RequestBody List<GatheringAccountRequest> ids);
 }

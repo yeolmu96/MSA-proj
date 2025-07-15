@@ -13,7 +13,6 @@ public class GatheringApplicationApproveRequest {
 
     private Boolean approved;
 
-    private List<Long> techStacks;
 
 
 }

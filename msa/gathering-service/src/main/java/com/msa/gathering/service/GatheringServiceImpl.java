@@ -6,10 +6,7 @@ import com.msa.gathering.controller.request.GatheringApplicationRequest;
 import com.msa.gathering.controller.request.GatheringListRequest;
 import com.msa.gathering.controller.request.GatheringRegisterRequest;
 import com.msa.gathering.controller.response.AccountInfoResponse;
-import com.msa.gathering.entity.Gathering;
-import com.msa.gathering.entity.GatheringApplication;
-import com.msa.gathering.entity.GatheringMember;
-import com.msa.gathering.entity.GatheringTechStack;
+import com.msa.gathering.entity.*;
 import com.msa.gathering.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +30,9 @@ public class GatheringServiceImpl implements GatheringService {
     private final GatheringApplicationRepository gatheringApplicationRepository;
     private final GatheringTechStackRepository gatheringTechStackRepository;
     private final TechStackRepository techStackRepository;
+    private final GatheringRoleRepository gatheringRoleRepository;
+    private final GatheringMemberTechStackRepository gatheringMemberTechStackRepository;
+
 
 
 
@@ -101,6 +101,26 @@ public class GatheringServiceImpl implements GatheringService {
                     registerRequest.getRole(), newGathering, true);
 
             gatheringMemberRepository.save(newGatheringMember);
+
+            registerRequest.getHostTechStacks().stream().forEach(techStack -> {
+                TechStack tech = techStackRepository.findById(techStack)
+                        .orElseThrow(() -> new RuntimeException("기술을 찾는 도중 오류 발생"));
+                gatheringMemberTechStackRepository.save(new GatheringMemberTechStack(newGatheringMember, tech));
+
+            });
+
+
+
+            registerRequest.getRoleRequests().forEach(roleRequest -> {
+                if(roleRequest.getRole().equals(roleRequest.getRole())) {
+                    gatheringRoleRepository.save(new GatheringRole(newGathering, roleRequest.getRole(), roleRequest.getRequiredNumber(),1));
+                }
+                else{
+                    gatheringRoleRepository.save(new GatheringRole(newGathering, roleRequest.getRole(), roleRequest.getRequiredNumber()));
+
+                }
+
+            });
 
 
             registerRequest.getTechStacks().forEach(stack -> {

@@ -5,7 +5,9 @@ import com.msa.gathering.controller.request.GatheringApplicationRequest;
 
 public interface GatheringApplicationService {
 
-    void application(GatheringApplicationRequest gatheringApplicationRequest);
+    boolean application(GatheringApplicationRequest gatheringApplicationRequest);
+
+    boolean applicationNumberCheck(GatheringApplicationRequest gatheringApplicationRequest);
 
     void approve(GatheringApplicationApproveRequest gatheringApplicationApproveRequest);
 }
