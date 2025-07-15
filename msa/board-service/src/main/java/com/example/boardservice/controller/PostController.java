@@ -1,19 +1,25 @@
 package com.example.boardservice.controller;
 
+import com.example.boardservice.controller.request.DeleteRequest;
 import com.example.boardservice.controller.request.PostRequest;
+import com.example.boardservice.controller.request.UpdateRequest;
 import com.example.boardservice.entity.Board;
+import com.example.boardservice.entity.Category;
 import com.example.boardservice.entity.Post;
 import com.example.boardservice.repository.BoardRepository;
 import com.example.boardservice.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostRepository postRepository;
@@ -82,4 +88,27 @@ public class PostController {
         return postRepository.save(post);
     }
 
+    @PostMapping("/delete")
+    public String deletePost(@RequestBody DeleteRequest request) {
+        postRepository.deleteById(request.getId());
+        return "삭제되었습니다.";
+    }
+
+    @PostMapping("/update")
+    public Post updatePost(@RequestBody UpdateRequest request) {
+        String content = request.getContent();
+        Category category = request.getCategory();
+        Optional<Post> optionalPost = postRepository.findById(request.getId());
+
+        if (optionalPost.isEmpty()) {
+            return null;
+        }
+        Post post = optionalPost.get();
+        post.setContent(content);
+        post.setCategory(category);
+        post.setTitle(request.getTitle());
+
+        return postRepository.save(post);
+
+    }
 }
