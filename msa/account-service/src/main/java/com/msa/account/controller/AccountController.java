@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.msa.account.redis_cache.RedisCacheService;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -175,5 +173,31 @@ public class AccountController {
     ){
         accountService.updateNicknameAndDeductPoint(token, request.getNewNickname());
         return ResponseEntity.ok("닉네임이 변경되었고 포인트가 100 차감되었습니다.");
+    }
+
+    //교육 기관명 수정
+    @PatchMapping("/company")
+    public ResponseEntity<Map<String, String>> updateCompany(
+            @RequestHeader("Authorization") String token,
+            @RequestBody UpdateCompanyRequest request
+    ){
+        String updatedCompany = accountService.updateCompany(token, request.getNewCompany());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("company", updatedCompany);
+
+        return ResponseEntity.ok(response);
+    }
+
+    //포인트 조회
+    @GetMapping("/point")
+    public ResponseEntity<Map<String, Long>> getPoint(
+            @RequestHeader("Authorization") String token
+    ){
+        Long point = accountService.getPoint(token);
+        Map<String, Long> response = new HashMap<>();
+        response.put("point", point);
+
+        return ResponseEntity.ok(response);
     }
 }
