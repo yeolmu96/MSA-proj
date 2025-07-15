@@ -13,7 +13,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @ToString
-@Table(name = "msa_account")
 public class Account {
 
     //계정 고유 ID

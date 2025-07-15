@@ -2,6 +2,8 @@ package com.msa.account.service;
 
 import com.msa.account.client.InstitutionClient;
 import com.msa.account.controller.request.RegisterAccountRequest;
+import com.msa.account.controller.request.UpdatePointRequest;
+import com.msa.account.controller.response.UpdatePointResponse;
 import com.msa.account.entity.Account;
 import com.msa.account.exception.DuplicateUserIdException;
 import com.msa.account.redis_cache.RedisCacheService;
@@ -9,6 +11,7 @@ import com.msa.account.repository.AccountRepository;
 import com.msa.account.utility.EncryptionUtility;
 import com.msa.account.utility.PasswordPolicyValidator;
 import com.msa.account.utility.TokenUtility;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -152,5 +155,29 @@ public class AccountService {
 
         //저장
         return accountRepository.save(account);
+    }
+
+    //포인트 증감
+    @Transactional
+    public UpdatePointResponse updatePoint(UpdatePointRequest request){
+
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new EntityNotFoundException("계정을 찾을 수 없습니다."));
+
+        Long beforePoint = account.getPoint() == null ? 0 : account.getPoint();
+        Long afterPoint = beforePoint + request.getPoint();
+
+        if(afterPoint < 0){
+            throw new IllegalArgumentException("포인트가 부족합니다.");
+        }
+
+        account.setPoint(afterPoint);
+        accountRepository.save(account);
+
+        return new UpdatePointResponse(
+                account.getId(),
+                afterPoint,
+                request.getReason() + "처리 완료"
+        );
     }
 }
