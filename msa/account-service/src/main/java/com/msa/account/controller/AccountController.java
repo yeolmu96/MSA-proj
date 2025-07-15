@@ -154,14 +154,14 @@ public class AccountController {
 
     //교육 기관명 수정
     @PatchMapping("/company")
-    public ResponseEntity<Map<String, String>> updateCompany(
+    public ResponseEntity<Map<String, Long>> updateCompany(
             @RequestHeader("Authorization") String token,
             @RequestBody UpdateTrainingIdRequest request
     ){
-        String updatedCompany = accountService.updateCompany(token, request.getNewTrainingId());
+        Long updatedTrainingId = accountService.updateTrainingId(token, request.getNewTrainingId());
 
-        Map<String, String> response = new HashMap<>();
-        response.put("company", updatedCompany);
+        Map<String, Long> response = new HashMap<>();
+        response.put("trainingId", Long.valueOf(updatedTrainingId));
 
         return ResponseEntity.ok(response);
     }
