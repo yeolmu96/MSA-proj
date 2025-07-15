@@ -33,13 +33,10 @@ public class AccountController {
     @Autowired
     private RedisCacheService redisCacheService;
     private final GatheringService gatheringService;
-    private final ReviewService reviewService;
     private final MyAccountService myAccountService;
     private final TokenService tokenService;
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private NicknameService nicknameService;
 
     @GetMapping("/test")
     public String test(){
@@ -49,25 +46,7 @@ public class AccountController {
     //사용자 등록
     @PostMapping("/register")
     public RegisterAccountResponse register(@RequestBody RegisterAccountRequest request) {
-        //비밀번호 정책 검증
-        PasswordPolicyValidator.validate(request.getPassword());
-
-        //닉네임 처리
-        String nickname = (request.getNickname() == null || request.getNickname().isBlank())
-                ? nicknameService.generateRandomNickname()
-                : request.getNickname();
-
-        //Account 엔티티 생성 + 비밀번호 암호화
-        Account account = new Account(
-                request.getUserId(),
-                EncryptionUtility.encode(request.getPassword()),
-                nickname,
-                request.getCompany(),
-                500L, // 초기 포인트 지급
-                null // 생성일자는 @CreationTimestamp로 자동 생성
-        );
-
-        Account created = accountRepository.save(account);
+        Account created = accountService.register(request);
         return RegisterAccountResponse.from(created);
     }
 

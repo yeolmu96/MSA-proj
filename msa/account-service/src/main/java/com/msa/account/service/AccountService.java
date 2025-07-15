@@ -1,6 +1,8 @@
 package com.msa.account.service;
 
+import com.msa.account.controller.request.RegisterAccountRequest;
 import com.msa.account.entity.Account;
+import com.msa.account.exception.DuplicateUserIdException;
 import com.msa.account.redis_cache.RedisCacheService;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.utility.EncryptionUtility;
@@ -16,6 +18,7 @@ public class AccountService {
 
     private final RedisCacheService redisCacheService;
     private final AccountRepository accountRepository;
+    private final NicknameService nicknameService;
 
     //비밀번호 변경
     public void changePassword(String token, String currentPassword, String newPassword) {
@@ -107,5 +110,34 @@ public class AccountService {
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         return account.getPoint();
+    }
+
+    //회원가입(userId 중복 검사, 비밀번호 정책 검증, 닉네임 처리)
+    public Account register(RegisterAccountRequest request){
+        //userId 중복 검사
+        if(accountRepository.existsByUserId(request.getUserId())){
+            throw new DuplicateUserIdException("이미 사용 중인 아이디입니다.");
+        }
+
+        //비밀전호 정책 검증
+        PasswordPolicyValidator.validate(request.getPassword());
+
+        //닉네임 처리
+        String nickname = (request.getNickname() == null || request.getNickname().isBlank())
+                ? nicknameService.generateRandomNickname()
+                : request.getNickname();
+
+        //Account 엔티티 생성 + 비밀번호 암호화
+        Account account = new Account(
+                request.getUserId(),
+                EncryptionUtility.encode(request.getPassword()),
+                nickname,
+                request.getCompany(),
+                500L, // 초기 포인트 지급
+                null // 생성일자는 @CreationTimestamp로 자동 생성
+        );
+
+        //저장
+        return accountRepository.save(account);
     }
 }
