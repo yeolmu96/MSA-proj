@@ -1,24 +1,29 @@
 package com.msa.account.controller.response;
 
 import com.msa.account.entity.Account;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class RegisterAccountResponse {
 
-    private Boolean isRegisterSuccess;
+    private String userId;
+    private String nickname;
+    private Long trainingId;
+    private Long point;
 
     public RegisterAccountResponse() {
 
     }
 
-    public RegisterAccountResponse(Boolean isRegisterSuccess) {
-        this.isRegisterSuccess = isRegisterSuccess;
-    }
-
-    public static RegisterAccountResponse from(Account account) {
-        return new RegisterAccountResponse(account != null);
+    public static RegisterAccountResponse from(Account account){
+        return new RegisterAccountResponse(
+                account.getUserId(),
+                account.getNickname(),
+                account.getTrainingId(),
+                account.getPoint()
+        );
     }
 }

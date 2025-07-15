@@ -36,6 +36,6 @@ public class ReviewService {
 
         return new ReviewAccountInfoResponse(
                 account.getNickname(),
-                account.getCompany()); //company 컬럽을 institutionType으로 매핑
+                account.getTrainingId());
     }
 }

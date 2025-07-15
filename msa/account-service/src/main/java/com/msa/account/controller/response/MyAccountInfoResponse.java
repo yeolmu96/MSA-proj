@@ -18,7 +18,7 @@ public class MyAccountInfoResponse {
     private Long accountId;
     private String userId;
     private String nickname;
-    private String company;
+    private Long trainingId;
     private Long point;
     private LocalDateTime createdAt;
 }

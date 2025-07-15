@@ -7,7 +7,6 @@ import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
 import com.msa.account.service.*;
 import com.msa.account.utility.EncryptionUtility;
-import com.msa.account.utility.PasswordPolicyValidator;
 import com.msa.account.utility.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,17 +28,13 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private RedisCacheService redisCacheService;
     private final GatheringService gatheringService;
-    private final ReviewService reviewService;
     private final MyAccountService myAccountService;
     private final TokenService tokenService;
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private NicknameService nicknameService;
 
     @GetMapping("/test")
     public String test(){
@@ -49,25 +44,7 @@ public class AccountController {
     //사용자 등록
     @PostMapping("/register")
     public RegisterAccountResponse register(@RequestBody RegisterAccountRequest request) {
-        //비밀번호 정책 검증
-        PasswordPolicyValidator.validate(request.getPassword());
-
-        //닉네임 처리
-        String nickname = (request.getNickname() == null || request.getNickname().isBlank())
-                ? nicknameService.generateRandomNickname()
-                : request.getNickname();
-
-        //Account 엔티티 생성 + 비밀번호 암호화
-        Account account = new Account(
-                request.getUserId(),
-                EncryptionUtility.encode(request.getPassword()),
-                nickname,
-                request.getCompany(),
-                500L, // 초기 포인트 지급
-                null // 생성일자는 @CreationTimestamp로 자동 생성
-        );
-
-        Account created = accountRepository.save(account);
+        Account created = accountService.register(request);
         return RegisterAccountResponse.from(created);
     }
 
@@ -139,7 +116,7 @@ public class AccountController {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다. Id: " +  accountId));
 
-        return new ReviewAccountInfoResponse(account.getNickname(), account.getCompany());
+        return new ReviewAccountInfoResponse(account.getNickname(), account.getTrainingId());
     }
 
     //내 정보 조회
@@ -177,14 +154,14 @@ public class AccountController {
 
     //교육 기관명 수정
     @PatchMapping("/company")
-    public ResponseEntity<Map<String, String>> updateCompany(
+    public ResponseEntity<Map<String, Long>> updateCompany(
             @RequestHeader("Authorization") String token,
-            @RequestBody UpdateCompanyRequest request
+            @RequestBody UpdateTrainingIdRequest request
     ){
-        String updatedCompany = accountService.updateCompany(token, request.getNewCompany());
+        Long updatedTrainingId = accountService.updateTrainingId(token, request.getNewTrainingId());
 
-        Map<String, String> response = new HashMap<>();
-        response.put("company", updatedCompany);
+        Map<String, Long> response = new HashMap<>();
+        response.put("trainingId", Long.valueOf(updatedTrainingId));
 
         return ResponseEntity.ok(response);
     }
