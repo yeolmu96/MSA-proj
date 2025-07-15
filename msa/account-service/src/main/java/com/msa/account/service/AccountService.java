@@ -1,5 +1,6 @@
 package com.msa.account.service;
 
+import com.msa.account.client.InstitutionClient;
 import com.msa.account.controller.request.RegisterAccountRequest;
 import com.msa.account.entity.Account;
 import com.msa.account.exception.DuplicateUserIdException;
@@ -19,6 +20,7 @@ public class AccountService {
     private final RedisCacheService redisCacheService;
     private final AccountRepository accountRepository;
     private final NicknameService nicknameService;
+    private final InstitutionClient institutionClient;
 
     //비밀번호 변경
     public void changePassword(String token, String currentPassword, String newPassword) {
@@ -114,6 +116,17 @@ public class AccountService {
 
     //회원가입(userId 중복 검사, 비밀번호 정책 검증, 닉네임 처리)
     public Account register(RegisterAccountRequest request){
+        //교육 코드 null 검사
+        if(request.getTrainingId() == null){
+            throw new IllegalArgumentException("교육 코드를 반드시 입력해야 합니다.");
+        }
+
+        //교육 코드 존재 여부 검증
+        boolean exist = institutionClient.checkInstitutionExists(request.getTrainingId());
+        if(!exist){
+            throw new IllegalArgumentException("존재하지 않는 교육 코드입니다.");
+        }
+
         //userId 중복 검사
         if(accountRepository.existsByUserId(request.getUserId())){
             throw new DuplicateUserIdException("이미 사용 중인 아이디입니다.");
