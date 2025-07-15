@@ -38,6 +38,11 @@ public class ReviewController {
         return CreateReviewResponse.from(registeredReview);
     }
 
+    @GetMapping("/list")
+    public List<Review> list() {
+        return reviewRepository.findAll();
+    }
+
     private String extractToken(String token) {
         if(token != null && token.startsWith("Bearer ")) {
             return token.substring(7);
