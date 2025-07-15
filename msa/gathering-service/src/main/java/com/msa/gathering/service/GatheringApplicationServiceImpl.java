@@ -5,6 +5,7 @@ import com.msa.gathering.controller.request.GatheringApplicationRequest;
 import com.msa.gathering.entity.*;
 import com.msa.gathering.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GatheringApplicationServiceImpl implements GatheringApplicationService {
@@ -30,13 +33,18 @@ public class GatheringApplicationServiceImpl implements GatheringApplicationServ
     @Transactional
     @Override
     public void application(GatheringApplicationRequest req) {
+
         try {
             gatheringApplicationRepository.save(GatheringApplication.from(req));
             Gathering gathering = gatheringRepository.findById(req.getGatheringId())
                     .orElseThrow(() -> new RuntimeException("모임 찾는데 오류 발생"));
 
+            log.info("리퀘스트 게더 아이디 : {}", req.getGatheringId());
+            log.info("찾아진 게더 아이디 : {}", gathering.getId());
+
             req.getTechStacks().forEach(stack -> {
-                gatheringTechStackRepository.save(new GatheringTechStack(gathering,
+                gatheringTechStackRepository.save(new GatheringTechStack(
+                        gathering,
                         techStackRepository.findById(stack).get()));
             });
         } catch (DataAccessException e) {
