@@ -1,10 +1,7 @@
 package com.msa.account.controller;
 
 
-import com.msa.account.controller.request.GatheringAccountRequest;
-import com.msa.account.controller.request.LoginAccountRequest;
-import com.msa.account.controller.request.PasswordChangeRequest;
-import com.msa.account.controller.request.RegisterAccountRequest;
+import com.msa.account.controller.request.*;
 import com.msa.account.controller.response.*;
 import com.msa.account.entity.Account;
 import com.msa.account.repository.AccountRepository;
@@ -21,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.msa.account.redis_cache.RedisCacheService;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +38,8 @@ public class AccountController {
     private final TokenService tokenService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private NicknameService nicknameService;
 
     @GetMapping("/test")
     public String test(){
@@ -54,9 +51,24 @@ public class AccountController {
     public RegisterAccountResponse register(@RequestBody RegisterAccountRequest request) {
         //비밀번호 정책 검증
         PasswordPolicyValidator.validate(request.getPassword());
+
+        //닉네임 처리
+        String nickname = (request.getNickname() == null || request.getNickname().isBlank())
+                ? nicknameService.generateRandomNickname()
+                : request.getNickname();
+
         //Account 엔티티 생성 + 비밀번호 암호화
-        Account createdAccount = accountRepository.save(request.toAccount());
-        return RegisterAccountResponse.from(createdAccount);
+        Account account = new Account(
+                request.getUserId(),
+                EncryptionUtility.encode(request.getPassword()),
+                nickname,
+                request.getCompany(),
+                500L, // 초기 포인트 지급
+                null // 생성일자는 @CreationTimestamp로 자동 생성
+        );
+
+        Account created = accountRepository.save(account);
+        return RegisterAccountResponse.from(created);
     }
 
     //로그인(userToken 반환)
@@ -151,5 +163,41 @@ public class AccountController {
     ){
         accountService.changePassword(token, request.getCurrentPassword(), request.getNewPassword());
         return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+    }
+
+    //닉네임 변경+포인트 차감
+    @PatchMapping("/nickname")
+    public ResponseEntity<String> updateNickname(
+            @RequestHeader("Authorization") String token,
+            @RequestBody UpdateNicknameRequest request
+    ){
+        accountService.updateNicknameAndDeductPoint(token, request.getNewNickname());
+        return ResponseEntity.ok("닉네임이 변경되었고 포인트가 100 차감되었습니다.");
+    }
+
+    //교육 기관명 수정
+    @PatchMapping("/company")
+    public ResponseEntity<Map<String, String>> updateCompany(
+            @RequestHeader("Authorization") String token,
+            @RequestBody UpdateCompanyRequest request
+    ){
+        String updatedCompany = accountService.updateCompany(token, request.getNewCompany());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("company", updatedCompany);
+
+        return ResponseEntity.ok(response);
+    }
+
+    //포인트 조회
+    @GetMapping("/point")
+    public ResponseEntity<Map<String, Long>> getPoint(
+            @RequestHeader("Authorization") String token
+    ){
+        Long point = accountService.getPoint(token);
+        Map<String, Long> response = new HashMap<>();
+        response.put("point", point);
+
+        return ResponseEntity.ok(response);
     }
 }
