@@ -1,12 +1,10 @@
 package com.msa.reviewservice.controller;
 
 import com.msa.reviewservice.client.AccountClient;
+import com.msa.reviewservice.client.InfoClient;
 import com.msa.reviewservice.controller.request.CreateReviewRequest;
 import com.msa.reviewservice.controller.request.UpdateReviewRequest;
-import com.msa.reviewservice.controller.response.CreateReviewResponse;
-import com.msa.reviewservice.controller.response.IdAccountResponse;
-import com.msa.reviewservice.controller.response.ReviewAccountInfoResponse;
-import com.msa.reviewservice.controller.response.UpdateReviewResponse;
+import com.msa.reviewservice.controller.response.*;
 import com.msa.reviewservice.entity.Review;
 import com.msa.reviewservice.repository.ReviewRepository;
 import jakarta.validation.Valid;
@@ -26,6 +24,9 @@ public class ReviewController {
     @Autowired
     private AccountClient accountClient;
 
+    @Autowired
+    private InfoClient infoClient;
+
     @PostMapping("/create")
     public CreateReviewResponse create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateReviewRequest request) {
         String pureToken = extractToken(token);
@@ -33,7 +34,13 @@ public class ReviewController {
         Long accountId = response.getAccountId();
 
         ReviewAccountInfoResponse requestedAccountInfo = accountClient.getAccountInfo(accountId);
-        Review requestedReview = request.toReview(accountId,requestedAccountInfo);
+        Long trainingId = requestedAccountInfo.getTrainingId();
+        ApiResponse<TrainingResponse> training = infoClient.getTrainingById(trainingId);
+        String trainingName = training.getData().getName();
+        int trainingPeriod = training.getData().getPeriod();
+        NcsType ncsType = training.getData().getNcsType();
+
+        Review requestedReview = request.toReview(accountId,requestedAccountInfo.getNickname(), trainingName, trainingPeriod, ncsType);
         Review registeredReview = reviewRepository.save(requestedReview);
         return CreateReviewResponse.from(registeredReview);
     }

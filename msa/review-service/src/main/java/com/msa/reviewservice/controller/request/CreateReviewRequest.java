@@ -1,5 +1,6 @@
 package com.msa.reviewservice.controller.request;
 
+import com.msa.reviewservice.controller.response.NcsType;
 import com.msa.reviewservice.controller.response.ReviewAccountInfoResponse;
 import com.msa.reviewservice.entity.Review;
 import lombok.*;
@@ -25,7 +26,7 @@ public class CreateReviewRequest {
     @Max(value = 5, message = "1~5의 숫자만 입력 가능합니다.")
     private Integer rating;
 
-    public Review toReview(Long accountId, ReviewAccountInfoResponse response) {
-        return new Review(accountId, response.getNickname(), response.getInstitutionType(), title, content, rating);
+    public Review toReview(Long accountId, String nickname, String trainingName, int trainingPeriod, NcsType trainingType) {
+        return new Review(accountId, nickname, trainingName, trainingPeriod, trainingType, title, content, rating);
     }
 }

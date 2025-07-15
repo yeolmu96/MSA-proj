@@ -14,7 +14,9 @@ public class UpdateReviewResponse {
     private Long id;
 
     private String nickname;
-    private String company;
+    private String trainingName;
+    private int trainingPeriod;
+    private NcsType trainingType;
     private String title;
     private String content;
     private Integer rating;
@@ -22,10 +24,12 @@ public class UpdateReviewResponse {
 
     public UpdateReviewResponse() {}
 
-    public UpdateReviewResponse(Long id, String nickname, String company, String title, String content, Integer rating, LocalDateTime createdAt) {
+    public UpdateReviewResponse(Long id, String nickname, String trainingName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, LocalDateTime createdAt) {
         this.id = id;
         this.nickname = nickname;
-        this.company = company;
+        this.trainingName = trainingName;
+        this.trainingPeriod = trainingPeriod;
+        this.trainingType = trainingType;
         this.title = title;
         this.content = content;
         this.rating = rating;
@@ -33,6 +37,6 @@ public class UpdateReviewResponse {
     }
 
     public static UpdateReviewResponse from(Review review) {
-        return new UpdateReviewResponse(review.getId(), review.getNickname(), review.getCompany(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
+        return new UpdateReviewResponse(review.getId(), review.getNickname(), review.getTrainingName(), review.getTrainingPeriod(), review.getTrainingType(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
     }
 }

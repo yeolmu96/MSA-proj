@@ -1,5 +1,6 @@
 package com.msa.reviewservice.entity;
 
+import com.msa.reviewservice.controller.response.NcsType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +24,9 @@ public class Review {
 
     private Long accountId;
     private String nickname;
-    private String company;
+    private String trainingName;
+    private int trainingPeriod;
+    private NcsType trainingType;
     private String title;
     private String content;
     private Integer rating;
@@ -31,10 +34,12 @@ public class Review {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public Review(Long accountId, String nickname, String company, String title, String content, Integer rating) {
+    public Review(Long accountId, String nickname, String trainingName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating) {
         this.accountId = accountId;
         this.nickname = nickname;
-        this.company = company;
+        this.trainingName = trainingName;
+        this.trainingPeriod = trainingPeriod;
+        this.trainingType = trainingType;
         this.title = title;
         this.content = content;
         this.rating = rating;

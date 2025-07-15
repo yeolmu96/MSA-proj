@@ -8,7 +8,9 @@ public class CreateReviewResponse {
     private Long id;
 
     private String nickname;
-    private String company;
+    private String trainingName;
+    private int trainingPeriod;
+    private NcsType trainingType;
     private String title;
     private String content;
     private Integer rating;
@@ -16,11 +18,13 @@ public class CreateReviewResponse {
 
     public CreateReviewResponse() {}
 
-    public CreateReviewResponse(Long id, String nickname, String company, String title, String content, Integer rating, LocalDateTime createdAt) {
+    public CreateReviewResponse(Long id, String nickname, String trainigName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, LocalDateTime createdAt) {
         this.id = id;
 
         this.nickname = nickname;
-        this.company = company;
+        this.trainingName = trainigName;
+        this.trainingPeriod = trainingPeriod;
+        this.trainingType = trainingType;
         this.title = title;
         this.content = content;
         this.rating = rating;
@@ -28,7 +32,7 @@ public class CreateReviewResponse {
     }
 
     public static CreateReviewResponse from(Review review) {
-        return new CreateReviewResponse(review.getId(), review.getNickname(), review.getCompany(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
+        return new CreateReviewResponse(review.getId(), review.getNickname(), review.getTrainingName(), review.getTrainingPeriod(), review.getTrainingType(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
     }
 
     public Long getId() {
@@ -39,9 +43,13 @@ public class CreateReviewResponse {
         return nickname;
     }
 
-    public String getCompany() {
-        return company;
+    public String getTrainingName() {
+        return trainingName;
     }
+
+    public int getTrainingPeriod() { return trainingPeriod; }
+
+    public NcsType getTrainingType() { return trainingType; }
 
     public String getTitle() {
         return title;
