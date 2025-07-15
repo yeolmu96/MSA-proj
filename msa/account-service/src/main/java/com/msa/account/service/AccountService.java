@@ -1,8 +1,10 @@
 package com.msa.account.service;
 
-import com.msa.account.client.InstitutionClient;
+import com.msa.account.controller.request.LoginAccountRequest;
 import com.msa.account.controller.request.RegisterAccountRequest;
 import com.msa.account.controller.request.UpdatePointRequest;
+import com.msa.account.controller.response.IdAccountResponse;
+import com.msa.account.controller.response.LoginAccountResponse;
 import com.msa.account.controller.response.UpdatePointResponse;
 import com.msa.account.entity.Account;
 import com.msa.account.entity.AccountActivityLog;
@@ -20,6 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -27,6 +33,8 @@ public class AccountService {
     private final RedisCacheService redisCacheService;
     private final AccountRepository accountRepository;
     private final NicknameService nicknameService;
+
+    private static final int NICKNAME_CHANGE_POINT_COST = 200;
 
     @Autowired
     private AccountActivityLogRepository accountActivityLogRepository;
@@ -40,29 +48,76 @@ public class AccountService {
         accountActivityLogRepository.save(log);
     }
 
-    //비밀번호 변경
-    public void changePassword(String token, String currentPassword, String newPassword) {
-
+    private Long getAccountIdFromToken(String token){
         String pureToken = TokenUtility.extractToken(token);
-
         Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
-
         if(accountId == null){
-            //토큰이 잘못되거나 만료된 경우
-            throw new RuntimeException("인증이 필요합니다.");
+            throw new IllegalArgumentException("인증이 필요합니다.");
         }
 
-        Account account = accountRepository.findById(accountId)
-                //사용자가 없는 경우
+        return accountId;
+    }
+
+    private Account getAccountByToken(String token){
+        Long accountId = getAccountIdFromToken(token);
+        return accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    }
 
-        boolean matched = EncryptionUtility.matches(currentPassword, account.getPassword());
+    //로그인
+    @Transactional
+    public LoginAccountResponse login(LoginAccountRequest request) {
+        Optional<Account> optionalAccount = accountRepository.findByUserId(request.getUserId());
 
-        if(!matched){
+        if (optionalAccount.isEmpty()) {
+            logActivity(null, "LOGIN_FAIL", "아이디 없음");
+            return new LoginAccountResponse(null);
+        }
+
+        Account account = optionalAccount.get();
+
+        if(!EncryptionUtility.matches(request.getPassword(), account.getPassword())){
+            logActivity(account.getId(), "LOGIN_FAIL", "비밀번호 불일치");
+            return new LoginAccountResponse(null);
+        }
+
+        //로그인 성공
+        String token = UUID.randomUUID().toString();
+        redisCacheService.setKeyAndValue(token, account.getId(), Duration.ofDays(1));
+        logActivity(account.getId(), "LOGIN", "로그인 성공");
+
+        return LoginAccountResponse.from(token);
+    }
+
+    //로그인해서 발급 받은 토큰으로 현재 로그인한 계정의 ID를 확인
+    @Transactional(readOnly = true)
+    public IdAccountResponse getAccountId(String token){
+        Long accountId = getAccountIdFromToken(token);
+
+        if(!accountRepository.existsById(accountId)){
+            throw new RuntimeException("사용자가 존재하지 않습니다.");
+        }
+
+        return IdAccountResponse.from(accountId);
+    }
+
+    //로그아웃(redis delete)
+    @Transactional
+    public void logout(String token){
+        Long accountId = getAccountIdFromToken(token);
+        redisCacheService.deleteKey(TokenUtility.extractToken(token));
+
+        logActivity(accountId, "LOGOUT", "로그아웃 완료");
+    }
+
+    //비밀번호 변경
+    public void changePassword(String token, String currentPassword, String newPassword) {
+        Account account = getAccountByToken(token);
+
+        if(!EncryptionUtility.matches(currentPassword, account.getPassword())){
             throw new RuntimeException("현재 비밀번호가 일치하지 않습니다.");
         }
 
-        //정책 검증
         PasswordPolicyValidator.validate(newPassword);
 
         //암호화 후 저장
@@ -74,26 +129,15 @@ public class AccountService {
     //닉네임 변경
     @Transactional
     public void updateNicknameAndDeductPoint(String token, String newNickname) {
-        String pureToken = TokenUtility.extractToken(token);
-
-        //Redis에서 accountId 가져오기
-        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
-        if(accountId == null){
-            throw new RuntimeException("인증이 필요합니다.");
-        }
-
-        //DB에서 Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        Account account = getAccountByToken(token);
 
         //포인트 차감 검증
-        if(account.getPoint() < 100){
+        if(account.getPoint() < NICKNAME_CHANGE_POINT_COST){
             throw new RuntimeException("포인트가 부족하여 닉네임을 변경할 수 없습니다.");
         }
 
         //포인트 차감
-        account.setPoint(account.getPoint() - 100);
-
+        account.setPoint(account.getPoint() - NICKNAME_CHANGE_POINT_COST);
         //닉네임 변경
         account.setNickname(newNickname);
     }
@@ -101,15 +145,7 @@ public class AccountService {
     //교육 기관 코드 수정
     @Transactional
     public Long updateTrainingId(String token, Long newTrainingId) {
-        String pureToken = TokenUtility.extractToken(token);
-
-        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
-        if(accountId == null){
-            throw new RuntimeException("인증이 필요합니다.");
-        }
-
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        Account account = getAccountByToken(token);
 
         account.setTrainingId(newTrainingId);
 
@@ -119,15 +155,7 @@ public class AccountService {
     //포인트 조회
     @Transactional(readOnly = true)
     public Long getPoint(String token) {
-        String pureToken = TokenUtility.extractToken(token);
-
-        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
-        if(accountId == null){
-            throw new RuntimeException("인증이 필요합니다.");
-        }
-
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        Account account = getAccountByToken(token);
 
         return account.getPoint();
     }
@@ -224,18 +252,15 @@ public class AccountService {
     //회원탈퇴(hard-delete)
     @Transactional
     public void deleteAccount(String token){
-        String pureToken = TokenUtility.extractToken(token);
-
-        Long accountId = redisCacheService.getValueByKey(pureToken, Long.class);
-        if(accountId == null){
-            throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
-        }
+        Long accountId = getAccountIdFromToken(token);
 
         if(!accountRepository.existsById(accountId)){
             throw new IllegalArgumentException("계정을 찾을 수 없습니다.");
         }
 
         accountRepository.deleteById(accountId);
-        redisCacheService.deleteKey(pureToken);
+        redisCacheService.deleteKey(TokenUtility.extractToken(token));
+
+        logActivity(accountId, "DELETE", "계정 삭제 완료");
     }
 }
