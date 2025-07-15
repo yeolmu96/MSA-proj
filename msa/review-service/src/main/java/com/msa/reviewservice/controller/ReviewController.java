@@ -66,6 +66,21 @@ public class ReviewController {
         return UpdateReviewResponse.from(updatedReview);
     }
 
+    @PostMapping("/delete")
+    public void delete(@RequestHeader("Authorization") String token, @RequestParam Long id) {
+        log.info("Delete review request: {}", id);
+
+        String pureToken = extractToken(token);
+        IdAccountResponse response = accountClient.getAccountId("Bearer "+pureToken);
+        Long accountId = response.getAccountId();
+
+        Review foundReview = reviewRepository.findById(id).orElseThrow(()->new RuntimeException("존재하지 않는 리뷰입니다."));
+        if(!foundReview.getId().equals(id)) {
+            throw new RuntimeException("리뷰를 등록한 사람이 아닙니다..");
+        }
+        reviewRepository.deleteById(id);
+    }
+
     private String extractToken(String token) {
         if(token != null && token.startsWith("Bearer ")) {
             return token.substring(7);
