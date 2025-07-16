@@ -21,10 +21,11 @@ public class UpdateReviewResponse {
     private String content;
     private Integer rating;
     private LocalDateTime createdAt;
+    private String imagePath;
 
     public UpdateReviewResponse() {}
 
-    public UpdateReviewResponse(Long id, String nickname, String trainingName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, LocalDateTime createdAt) {
+    public UpdateReviewResponse(Long id, String nickname, String trainingName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, LocalDateTime createdAt, String imagePath) {
         this.id = id;
         this.nickname = nickname;
         this.trainingName = trainingName;
@@ -34,9 +35,10 @@ public class UpdateReviewResponse {
         this.content = content;
         this.rating = rating;
         this.createdAt = createdAt;
+        this.imagePath = imagePath;
     }
 
     public static UpdateReviewResponse from(Review review) {
-        return new UpdateReviewResponse(review.getId(), review.getNickname(), review.getTrainingName(), review.getTrainingPeriod(), review.getTrainingType(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
+        return new UpdateReviewResponse(review.getId(), review.getNickname(), review.getTrainingName(), review.getTrainingPeriod(), review.getTrainingType(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt(), review.getImagePath());
     }
 }
