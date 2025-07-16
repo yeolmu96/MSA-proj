@@ -3,6 +3,7 @@ package com.example.boardservice.controller;
 import com.example.boardservice.controller.request.DeleteRequest;
 import com.example.boardservice.controller.request.PostRequest;
 import com.example.boardservice.controller.request.UpdateRequest;
+import com.example.boardservice.dto.PostResponse;
 import com.example.boardservice.entity.Board;
 import com.example.boardservice.entity.Category;
 import com.example.boardservice.entity.Post;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -27,27 +29,32 @@ public class PostController {
 
     // 특정 게시판에 글 작성
     @PostMapping("/create")
-    public Post createPost(@RequestBody PostRequest request) {
+    public PostResponse createPost(@RequestBody PostRequest request) {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
+        post.setCategory(request.getCategory());
         post.setBoard(board); // 게시판 연관관계 설정
 
-        return postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        return new PostResponse(savedPost);
     }
 
     // 게시판에 속한 글 목록 가져오기
     @GetMapping("/board/{boardId}")
-    public List<Post> getPostsByBoard(@PathVariable Long boardId) {
-        return postRepository.findByBoardId(boardId);
+    public List<PostResponse> getPostsByBoard(@PathVariable Long boardId) {
+        return postRepository.findByBoardId(boardId)
+                .stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
     }
 
     // 게시글 조회수
     @GetMapping("/{id}")
-    public Post getPost(@PathVariable Long id) {
+    public PostResponse getPost(@PathVariable Long id) {
         Optional<Post> maybePost = postRepository.findById(id);
 
         if (maybePost.isEmpty()) {
@@ -56,9 +63,9 @@ public class PostController {
 
         Post post = maybePost.get();
         post.setViewCount(post.getViewCount() + 1);
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
 
-        return post;
+        return new PostResponse(savedPost);
     }
 
     // 추천 API 만들기
