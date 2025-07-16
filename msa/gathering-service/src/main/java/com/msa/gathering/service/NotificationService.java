@@ -12,6 +12,8 @@ public interface NotificationService {
     
     void createApplicationStatusNotification(Long applicantId, Long gatheringId, Long applicationId, boolean isApproved);
     
+    void createNotification(Long accountId, String title, String message, String link);
+    
     NotificationStatusResponse getNotifications(Long accountId);
     
     void markAsRead(Long notificationId);

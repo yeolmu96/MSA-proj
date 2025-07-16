@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PORTS=(8080 9999 8761 9998 8081)
+PORTS=(8080 9999 8761 9998 8081 8082 8083 8084 8085 8086 8087)
 
 for PORT in "${PORTS[@]}"; do
   PID=$(lsof -ti tcp:$PORT)

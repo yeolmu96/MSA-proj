@@ -36,6 +36,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void createNotification(Long accountId, String title, String message, String link) {
+
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public NotificationStatusResponse getNotifications(Long accountId) {
         List<Notification> notifications = notificationRepository.findByAccountIdOrderByCreatedAtDesc(accountId);

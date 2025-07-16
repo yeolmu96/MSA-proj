@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GatheringUpdateRequest {
+public class ContactInfoRequest {
     private Long gatheringId;
-    private Long hostId;
-    private String teamName;
-    private String title;
-    private String description;
-    private int maxMemberCount;
+    private Long accountId;
+    private String phoneNumber;
+    private String email;
+    private String openChatLink;
+    private String additionalInfo;
 }

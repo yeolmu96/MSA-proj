@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface GatheringApplicationTechStackRepository extends JpaRepository<GatheringApplicationTechStack, Long> {
     List<GatheringApplicationTechStack> findByGatheringApplicationId(Long applicationId);
+    void deleteByGatheringApplicationId(Long applicationId);
 }

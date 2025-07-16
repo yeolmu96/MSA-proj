@@ -37,10 +37,32 @@ public class Gathering {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private GatheringStatus status = GatheringStatus.RECRUITING;
 
 
     public void setCurrentMemberCount(int currentMemberCount) {
         this.currentMemberCount = currentMemberCount;
+    }
+    
+    public void update(String teamName, String title, String description, int maxMemberCount) {
+        this.teamName = teamName;
+        this.title = title;
+        this.description = description;
+        this.maxMemberCount = maxMemberCount;
+        this.updatedAt = LocalDateTime.now();
+    }
+    
+    public void startGathering() {
+        this.status = GatheringStatus.STARTED;
+        this.updatedAt = LocalDateTime.now();
+    }
+    
+    public void completeGathering() {
+        this.status = GatheringStatus.COMPLETED;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Gathering(Long hostId, String teamName, String title, String description, int maxMemberCount, int currentMemberCount) {
