@@ -15,10 +15,11 @@ public class CreateReviewResponse {
     private String content;
     private Integer rating;
     private LocalDateTime createdAt;
+    private String imagePath;
 
     public CreateReviewResponse() {}
 
-    public CreateReviewResponse(Long id, String nickname, String trainigName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, LocalDateTime createdAt) {
+    public CreateReviewResponse(Long id, String nickname, String trainigName, int trainingPeriod, NcsType trainingType, String title, String content, Integer rating, LocalDateTime createdAt, String imagePath) {
         this.id = id;
 
         this.nickname = nickname;
@@ -29,10 +30,11 @@ public class CreateReviewResponse {
         this.content = content;
         this.rating = rating;
         this.createdAt = createdAt;
+        this.imagePath = imagePath;
     }
 
     public static CreateReviewResponse from(Review review) {
-        return new CreateReviewResponse(review.getId(), review.getNickname(), review.getTrainingName(), review.getTrainingPeriod(), review.getTrainingType(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt());
+        return new CreateReviewResponse(review.getId(), review.getNickname(), review.getTrainingName(), review.getTrainingPeriod(), review.getTrainingType(), review.getTitle(), review.getContent(), review.getRating(), review.getCreatedAt(), review.getImagePath());
     }
 
     public Long getId() {

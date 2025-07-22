@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -39,8 +41,9 @@ public class ReviewController {
         String trainingName = training.getData().getName();
         int trainingPeriod = training.getData().getPeriod();
         NcsType ncsType = training.getData().getNcsType();
+        String imagePath = "training"+trainingId+".png";
 
-        Review requestedReview = request.toReview(accountId,requestedAccountInfo.getNickname(), trainingName, trainingPeriod, ncsType);
+        Review requestedReview = request.toReview(accountId,requestedAccountInfo.getNickname(), trainingId, trainingName, trainingPeriod, ncsType, imagePath);
         Review registeredReview = reviewRepository.save(requestedReview);
         return CreateReviewResponse.from(registeredReview);
     }
@@ -49,6 +52,17 @@ public class ReviewController {
     public List<Review> list() {
         return reviewRepository.findAll();
     }
+
+//    @GetMapping("/list")
+//    public List<ReviewListResponse> list() {
+//        List<Review> all = reviewRepository.findAll();
+//        List<ReviewListResponse> res = new ArrayList<>();
+//        all.stream().forEach(r -> {
+//            ReviewListResponse reviewListResponse = new ReviewListResponse(r.getRating(), r.getTitle());
+//            res.add(reviewListResponse);
+//        });
+//        return res;
+//    }
 
     @GetMapping("/list-by/{trainingName}")
     public List<Review> listByTrainingId(@PathVariable String trainingName) {
