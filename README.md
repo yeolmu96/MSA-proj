@@ -29,6 +29,105 @@ msa/
 | Gathering Service | 8086 | 최현수 |
 | Review Service | 8087 | 김혜인 |
 
+
+
+<img width="1427" height="748" alt="image" src="https://github.com/user-attachments/assets/9632e97b-fffc-459c-9319-834db8e46926" />
+
+
+
+
+
+< 메인(randing) 페이지 >
+
+
+
+
+
+
+<img width="1446" height="732" alt="image" src="https://github.com/user-attachments/assets/0a36b7ca-02c7-4a9a-a82d-616dc0a0c828" />
+
+
+< 리뷰 페이지 >
+
+
+<img width="1441" height="765" alt="image" src="https://github.com/user-attachments/assets/c24ae6b1-bc18-46d6-8a08-233155af67bf" />
+
+< 훈련기관 정보 제공 페이지 (+ 검색 기능) >
+
+
+<img width="1446" height="761" alt="image" src="https://github.com/user-attachments/assets/5e664b00-af14-4182-9032-46136edf9d26" />
+
+< 훈련교육기관 정보 제공 페이지 (+ 검색 기능) >
+
+
+
+<img width="1423" height="667" alt="image" src="https://github.com/user-attachments/assets/dd015050-e754-4125-a7f8-7ca3b57a4eb4" />
+
+<img width="1380" height="759" alt="image" src="https://github.com/user-attachments/assets/0c51ad69-531b-4356-857d-87b379d9b809" />
+
+
+< 커뮤니티 게시판 >
+
+
+
+<img width="1412" height="792" alt="image" src="https://github.com/user-attachments/assets/939935dd-3f95-4eab-b3a7-11f55364d2c4" />
+
+<img width="1363" height="775" alt="image" src="https://github.com/user-attachments/assets/21f33483-ca5d-4391-8506-0629e0f6eec4" />
+
+<img width="1345" height="775" alt="image" src="https://github.com/user-attachments/assets/d84be86e-1e6d-457d-9988-37f1540afa95" />
+
+
+
+
+
+<img width="1381" height="757" alt="image" src="https://github.com/user-attachments/assets/5086457b-5288-4073-ae21-981c9f768c27" />
+
+<img width="1370" height="746" alt="image" src="https://github.com/user-attachments/assets/6286e9a7-557c-4fb5-92e0-55ea66dd99e0" />
+
+<img width="1349" height="768" alt="image" src="https://github.com/user-attachments/assets/19e6748b-02a1-4fa8-989c-c28d1ffc1f24" />
+
+<img width="1227" height="756" alt="image" src="https://github.com/user-attachments/assets/ec53c4d5-07c5-46cc-a50a-56c442f8e5aa" />
+
+<img width="1240" height="729" alt="image" src="https://github.com/user-attachments/assets/bbd542fb-bcc0-4341-b479-a6f563852e4f" />
+
+<img width="1241" height="751" alt="image" src="https://github.com/user-attachments/assets/868ffcc6-bfd2-4b36-af4f-40c93da30687" />
+
+
+< 모임 >
+
+
+
+<img width="1357" height="773" alt="image" src="https://github.com/user-attachments/assets/4e51974a-b34a-4329-b21f-792d9f6155cd" />
+
+<img width="1282" height="773" alt="image" src="https://github.com/user-attachments/assets/391c5e77-b91f-4e4b-ae39-8584f48dceac" />
+
+<img width="1370" height="781" alt="image" src="https://github.com/user-attachments/assets/885e36b2-14c9-4110-916a-c89e1b8e0cf8" />
+
+
+
+< 마이페이지 >
+
+
+
+<img width="1398" height="671" alt="image" src="https://github.com/user-attachments/assets/533a793c-fd65-42a4-8f7b-54f90b740bde" />
+
+<img width="1348" height="657" alt="image" src="https://github.com/user-attachments/assets/c3da5d8b-57b3-4ac4-b1ed-8a689b835144" />
+
+<img width="1356" height="742" alt="image" src="https://github.com/user-attachments/assets/0d614854-db5f-4cb0-9e7a-f5f77362791c" />
+
+<img width="1380" height="757" alt="image" src="https://github.com/user-attachments/assets/bf95b087-d4ee-4f9e-9ed0-be125353f287" />
+
+
+
+< Q&A >
+
+
+
+
+
+
+
+
 ## 데이터베이스 설정
 
 ### 사용자 계정 생성
@@ -117,6 +216,8 @@ INSERT INTO training (name, ncs_type, period, start_date, end_date, institution_
 
 ### 2. 서비스 실행
 
+#### run.sh 실행으로 한번에 실행가능합니다.
+
 #### Eureka Server 실행 (필수)
 ```bash
 cd eureka-server
@@ -196,20 +297,5 @@ API Gateway는 다음 경로로 요청을 각 서비스로 라우팅합니다:
                - Path=/api/your-path/**
    ```
 
-## 문제 해결
 
-### 서비스가 Eureka에 등록되지 않는 경우
-1. Eureka Server가 실행 중인지 확인
-2. `application.yml`의 `eureka.client.service-url.defaultZone` 설정 확인
-3. 서비스 이름이 소문자로 설정되었는지 확인
-4. 로그에서 연결 오류 메시지 확인
 
-### Gateway 라우팅이 작동하지 않는 경우
-1. 대상 서비스가 Eureka에 등록되었는지 확인
-2. 서비스 이름이 정확한지 확인 (대소문자 구분)
-3. Gateway 설정의 `lb://SERVICE-NAME` 형식 확인
-4. 서비스가 정상적으로 실행 중인지 확인
-
-## 라이센스
-
-이 프로젝트는 MIT 라이센스 하에 배포됩니다.
