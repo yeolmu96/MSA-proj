@@ -4,7 +4,6 @@ Spring Cloud 기반의 마이크로서비스 아키텍처 프로젝트입니다.
 
 <br /><br />
 
-<img width="182" height="62" alt="image" src="https://github.com/user-attachments/assets/b8c82973-0489-420c-8aea-43ebe34aadd7" /><br />
 <img width="785" height="436" alt="스크린샷 2025-07-22 오후 1 55 49" src="https://github.com/user-attachments/assets/75c3bf72-599f-4d77-8ef6-e2d123971071" />
 
 
