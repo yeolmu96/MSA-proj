@@ -90,7 +90,6 @@ public class GatherController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody GatheringRegisterRequest gatheringRegisterRequest) {
         gatheringService.register(gatheringRegisterRequest);
-//        List<GatheringListRequest> gatheringList = gatheringService.getList();
         return ResponseEntity.ok("등록 성공");
     }
 

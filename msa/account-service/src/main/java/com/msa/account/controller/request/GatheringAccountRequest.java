@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/*
-gathering 요청
- */
 @Getter
 @Setter
 @ToString

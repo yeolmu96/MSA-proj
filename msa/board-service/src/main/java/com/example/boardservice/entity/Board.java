@@ -20,6 +20,7 @@ public class Board {
     private String title;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Post> posts;
 
 

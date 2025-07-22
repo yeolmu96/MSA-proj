@@ -1,10 +1,4 @@
 package com.msa.account.utility;
-/*
-비밀번호 정책
-✅ 최소 8자 이상
-✅ 영문, 숫자 반드시 포함
-✅ 필요시 특수문자 포함 권장
- */
 public class PasswordPolicyValidator {
 
     public static void validate(String password){

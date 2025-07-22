@@ -2,9 +2,6 @@ package com.msa.account.controller.response;
 
 import com.msa.account.entity.Role;
 import lombok.*;
-/*
-gathering 응답
- */
 @Getter @Setter
 @NoArgsConstructor
 @ToString
