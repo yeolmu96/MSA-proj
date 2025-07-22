@@ -2,7 +2,14 @@
 
 Spring Cloud 기반의 마이크로서비스 아키텍처 프로젝트입니다.
 
+<br /><br />
+
+<img width="182" height="62" alt="image" src="https://github.com/user-attachments/assets/b8c82973-0489-420c-8aea-43ebe34aadd7" />
+
+<br /><br />
+
 ## 프로젝트 구조
+<br /><br />
 
 ```
 msa/
