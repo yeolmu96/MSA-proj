@@ -31,7 +31,7 @@ msa/
 
 
 ### 주요 기능
-
+<br />
 
 ✅ 계정(Account) 관련
 <br /> <br />
@@ -47,18 +47,23 @@ msa/
 포인트 시스템 제공 (조회, 업데이트)
 
 회원 탈퇴 처리
+<br /><br />
 
 ✅ 교육 기관(Institutions) 관리
+<br />
 교육 기관 등록, 조회, 수정, 삭제
 
 전체 목록 및 특정 기관 상세 조회
 
 ✅ 교육과정(Training) 관리
+<br />
 교육과정 등록, 조회, 수정, 삭제
 
 전체 목록 및 개별 과정 조회 가능
+<br /><br />
 
 ✅ 게시판(Board) 기능
+<br />
 게시판에 게시글 생성 및 전체 목록 조회
 
 특정 게시판 또는 특정 게시글 조회
@@ -70,15 +75,18 @@ msa/
 특정 게시글에 댓글 작성
 
 특정 게시글의 전체 댓글 목록 조회
+<br /><br />
 
 ✅ 리뷰(Review) 기능
+<br />
 리뷰 생성, 수정, 삭제
 
 모든 리뷰 또는 특정 교육과정/사용자의 리뷰 조회
 
 사용자 기반 리뷰 조회 시 권한 검사 포함
-
+<br /><br />
 ✅ 모임(Gathering) 기능
+<br />
 모임 생성 및 전체 목록 조회
 
 특정 모임 상세 조회 및 수정, 삭제 가능
@@ -90,8 +98,9 @@ msa/
 특정 사용자의 모임 목록 조회 가능
 
 Account 서비스와 연동하여 사용자 정보 요청
-
+<br /><br />
 ✅ Q&A 기능
+<br />
 질문 생성 및 전체 목록 조회
 
 특정 질문 상세 조회 및 수정, 삭제 가능
@@ -100,7 +109,7 @@ Account 서비스와 연동하여 사용자 정보 요청
 
 질문 추천 기능 및 사용자별 질문 이력 조회 가능
 
-  
+  <br /><br />
 
 
 
@@ -124,7 +133,7 @@ Account 서비스와 연동하여 사용자 정보 요청
 <img width="1446" height="732" alt="image" src="https://github.com/user-attachments/assets/0a36b7ca-02c7-4a9a-a82d-616dc0a0c828" />
 
 
-
+<br /><br />
 
 
 
@@ -137,69 +146,69 @@ Account 서비스와 연동하여 사용자 정보 요청
 
 
 <img width="1441" height="765" alt="image" src="https://github.com/user-attachments/assets/c24ae6b1-bc18-46d6-8a08-233155af67bf" />
-
+<br />
 < 훈련기관 정보 제공 페이지 (+ 검색 기능) >
 
-
+<br />
 <img width="1446" height="761" alt="image" src="https://github.com/user-attachments/assets/5e664b00-af14-4182-9032-46136edf9d26" />
-
+<br />
 < 훈련교육기관 정보 제공 페이지 (+ 검색 기능) >
-
+<br />
 
 
 <img width="1423" height="667" alt="image" src="https://github.com/user-attachments/assets/dd015050-e754-4125-a7f8-7ca3b57a4eb4" />
-
+<br />
 <img width="1380" height="759" alt="image" src="https://github.com/user-attachments/assets/0c51ad69-531b-4356-857d-87b379d9b809" />
-
+<br />
 
 < 커뮤니티 게시판 >
-
+<br />
 
 
 <img width="1412" height="792" alt="image" src="https://github.com/user-attachments/assets/939935dd-3f95-4eab-b3a7-11f55364d2c4" />
-
+<br />
 <img width="1363" height="775" alt="image" src="https://github.com/user-attachments/assets/21f33483-ca5d-4391-8506-0629e0f6eec4" />
-
+<br />
 <img width="1345" height="775" alt="image" src="https://github.com/user-attachments/assets/d84be86e-1e6d-457d-9988-37f1540afa95" />
 
 
-
+<br />
 
 
 
 
 
 <img width="1227" height="756" alt="image" src="https://github.com/user-attachments/assets/ec53c4d5-07c5-46cc-a50a-56c442f8e5aa" />
-
+<br />
 <img width="1240" height="729" alt="image" src="https://github.com/user-attachments/assets/bbd542fb-bcc0-4341-b479-a6f563852e4f" />
-
+<br />
 <img width="1241" height="751" alt="image" src="https://github.com/user-attachments/assets/868ffcc6-bfd2-4b36-af4f-40c93da30687" />
-
+<br />
 
 < 모임 >
 
-
+<br />
 <img width="1381" height="757" alt="image" src="https://github.com/user-attachments/assets/5086457b-5288-4073-ae21-981c9f768c27" />
-
+<br />
 <img width="1370" height="746" alt="image" src="https://github.com/user-attachments/assets/6286e9a7-557c-4fb5-92e0-55ea66dd99e0" />
-
+<br />
 <img width="1349" height="768" alt="image" src="https://github.com/user-attachments/assets/19e6748b-02a1-4fa8-989c-c28d1ffc1f24" />
-
+<br />
 < 로그인 >
 <br />
 
 
 
 <img width="1357" height="773" alt="image" src="https://github.com/user-attachments/assets/4e51974a-b34a-4329-b21f-792d9f6155cd" />
-
+<br />
 <img width="1282" height="773" alt="image" src="https://github.com/user-attachments/assets/391c5e77-b91f-4e4b-ae39-8584f48dceac" />
-
+<br />
 <img width="1370" height="781" alt="image" src="https://github.com/user-attachments/assets/885e36b2-14c9-4110-916a-c89e1b8e0cf8" />
-
+<br />
 
 
 < 마이페이지 >
-
+<br />
 
 
 <img width="1398" height="671" alt="image" src="https://github.com/user-attachments/assets/533a793c-fd65-42a4-8f7b-54f90b740bde" />
