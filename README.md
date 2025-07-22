@@ -11,7 +11,11 @@ Spring Cloud 기반의 마이크로서비스 아키텍처 프로젝트입니다.
 
 
 <img width="769" height="360" alt="image" src="https://github.com/user-attachments/assets/98b96f98-4260-455c-a64c-8858c0eb2d40" />
+<br /><br />
 
+Notion <br />
+
+https://canary-marquis-2c0.notion.site/MSA-21fdf07bd8c780c2bf9ef217e9fed606?source=copy_link
 
 <br /><br />
 
